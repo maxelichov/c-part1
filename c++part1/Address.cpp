@@ -23,41 +23,31 @@ Address :: ~Address() /* d'tor*/
 	
 }
 
-bool Address::setCountry(char* name)
+void Address::setCountry(char* name)
 {
 	int len = strlen(name);
-	if (len == 0 || len >= MAX_LEN)
-	return 0;
+
 	country = new char[len + 1];
 	strcpy(country, name);
 	country = name;
-	return 1;
+	
 }
 
-bool Address:: setCity(char* name)
+void Address:: setCity(char* name)
 {
 	int len = strlen(name);
-	if (len == 0 || len >= MAX_LEN)
-	return 0;
 	city = new char[len + 1];
 	strcpy(city, name);
-	return 1;
+	
 }
 
-Address :: ~Address()
-{
-	delete[] country;
-	delete[] city;
-	country = nullptr;
-	city = nullptr;
-	/*delete address itself?*/
-}
 
-char* Address::getCountry() const
+
+char* Address::getCountry() 
 {
 	return country;
 }
-char* Address ::getCity() const
+char* Address ::getCity() 
 {
 	return city;
 }

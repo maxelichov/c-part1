@@ -21,12 +21,12 @@ void seller::setSellerLastName(char* lastname)
 {
 	int nameLen = strlen(lastname);
 	l_name = new char[nameLen + 1];
-	strcpy(f_name, lastname);
+	strcpy(l_name, lastname);
 }
-void seller :: setSellerAddress(Address& address)
+/*void seller :: setSellerAddress(Address& address)
 {
 	s_address = &address;
-}
+}*/
 
 void seller :: setSellerPassword(char* password)
 {
@@ -48,31 +48,27 @@ char* seller :: getPassword() const
 	return s_password;
 }
 
-char* seller :: getCountry() const
-{
-	Address::getCountry;					
-}
+/* to get city and country use : s_address->getcity , s_address->getcountry*/
+ 
 
-char* seller :: getCity() const
-{
-	Address::getCity;
-}
-
- seller ::seller(char* firstname, char* lastname, char* password, Address& address)
-{
+seller::seller(char* firstname, char* lastname, char* password, char* country, char* city) : s_address(country, city) 
+{		/*ctor*/
 	 setSellerFirstName(firstname);
 	 setSellerLastName(lastname);
 	 setSellerPassword(password);
-	 setSellerAddress(address);
+	
 }	
 
- seller :: ~seller()
+ seller :: ~seller() 
  {
-	 
+	 /*dtor*/
 	 delete[] f_name;
 	 delete[] l_name;
 	 delete[] s_password;
-	
+	 f_name = nullptr;
+	 l_name = nullptr;
+	 s_password = nullptr;
+	/*city and country dying automaticaly in address dtor*/
  }
 
 

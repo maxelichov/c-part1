@@ -12,9 +12,9 @@ private:
 public:
 
 	Address(char* Country,char* City);
-	bool setCountry(char* country);
-	bool setCity(char* city);
-	char* getCountry()	const;
-	char* getCity() const;
 	~Address();
+	void setCountry(char* country);
+	void setCity(char* city);
+	char* getCountry();
+	char* getCity();
 };
