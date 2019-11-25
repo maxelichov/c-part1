@@ -1,8 +1,8 @@
 
 #include "pch.h"
-#define CRT_SECURE_NO_WARNINGS
-#pragma warning(disable : 4996)
 #pragma once
+#define CRT_SECURE_NO_WARNINGS
+
 #include "Address.h"
 #include "Seller.h"
 #include <string.h>
@@ -72,7 +72,7 @@ char* seller :: getCity() const
 	 delete[] f_name;
 	 delete[] l_name;
 	 delete[] s_password;
-	 s_address->~Address; /*deletion of country and city is done in Address d'tor*/
+	
  }
 
 
