@@ -1,74 +1,144 @@
-
-#include "pch.h"
-#pragma once
-#define CRT_SECURE_NO_WARNINGS
-
-#include "Address.h"
 #include "Seller.h"
+#include "Address.h"
 #include <string.h>
 #include <iostream>
-#include "Seller.h"
+#define maxLen 31
+#pragma warning(disable: 4996)
+using namespace std;
 
 
-
-void seller :: setSellerFirstName(char* firstname)
+Seller::Seller(char* Fname, char* Lname, char* bUsername, char* bPassword, char* Country, char* City, char* Street, int& HomeNumber) : s_address(Country, City, Street, HomeNumber)
 {
-	int nameLen = strlen(firstname);
-	f_name = new char[nameLen + 1];
-	strcpy(f_name, firstname);
+	bool indicator;
+	indicator = setName(Fname, Lname);
+	if (!indicator)
+	{
+		do
+		{
+			cout << "Error in the input for first name / last name, please try again" << endl;
+			cout << "Enter First name, Last Name" << endl;
+			cin >> Fname >> Lname;
+			indicator = setName(Fname, Lname);
+
+		} while (!indicator);
+	}
+	indicator = setUsername(bUsername);
+	if (!indicator)
+	{
+		do
+		{
+			cout << "Error in input for username, please enter again :" << endl;
+			cin >> bUsername;
+			indicator = setUsername(bUsername);
+
+		} while (!indicator);
+
+	}
+	indicator = setPassword(bPassword);
+	if (!indicator)
+	{
+		do
+		{
+			cout << "Error in input for password, please enter again :" << endl;
+			cin >> bPassword;
+			indicator = setPassword(bPassword);
+
+		} while (!indicator);
+
+	}
+
+	cout << "Success in making a seller" << endl; // just for testing.
 }
-void seller::setSellerLastName(char* lastname)
+
+bool Seller::setName(char* firstName, char* lastName)
 {
-	int nameLen = strlen(lastname);
-	l_name = new char[nameLen + 1];
-	strcpy(l_name, lastname);
+	int fNameLen = strlen(firstName);
+	int LNameLen = strlen(lastName);
+	int i;
+
+	if (fNameLen >= maxLen || fNameLen < 1)
+	{
+		cout << "Invalid First name" << endl;
+		return 0;
+	}
+
+	if (LNameLen >= maxLen || LNameLen < 1)
+	{
+		cout << "Invalid last name" << endl;
+		return 0;
+	}
+
+	for (i = 0; i < fNameLen; i++)
+	{
+		if (((firstName[i] < 'A') || (firstName[i] > 'Z')) && ((firstName[i] < 'a') || (firstName[i] > 'z')))
+		{
+			cout << "Invalid char in first name :" << firstName[i] << endl;
+			return 0;
+		}
+	}
+
+	for (i = 0; i < LNameLen; i++)
+	{
+		if (((lastName[i] < 'A') || (lastName[i] > 'Z')) && ((lastName[i] < 'a') || (lastName[i] > 'z')))
+		{
+			cout << "Invalid char in last name :" << lastName[i] << endl;
+			return 0;
+		}
+	}
+	s_Firstname = new char[maxLen];
+	s_Lastname = new char[maxLen];
+	strcpy(s_Firstname, firstName);
+	strcpy(s_Lastname, lastName);
+	return 1;
+
+	return 1;
 }
-/*void seller :: setSellerAddress(Address& address)
-{
-	s_address = &address;
-}*/
 
-void seller :: setSellerPassword(char* password)
+bool Seller::setUsername(char* username)
 {
-	int nameLen = strlen(password);
-	s_password = new char[nameLen + 1];
-	strcpy(s_password, password);
+	int len = strlen(username);
+	if (len < 1 || len >= maxLen)
+	{
+		cout << "Invalid username" << endl;
+		return 0;
+	}
+	s_Username = new char[len];
+	strcpy(s_Username, username);
+
+	return 1;
+
 }
 
-char* seller::getFirstName() const
+bool Seller::setPassword(char* password)
 {
-	return f_name;
+	int len = strlen(password);
+	if (len < 1 || len >= maxLen)
+	{
+		cout << "Invalid password" << endl;
+		return 0;
+	}
+	s_Password = new char[len];
+	strcpy(s_Password, password);
+
+	return 1;
+
 }
-char* seller::getLastName() const
+
+
+Seller::~Seller() // D'TOR
 {
-	return l_name;
+	delete[] s_Firstname;
+	delete[] s_Lastname;
+	delete[] s_Password;
+	delete[] s_Username;
+
 }
-char* seller :: getPassword() const
+
+void Seller::s_show() const
 {
-	return s_password;
+	cout << "Seller's name is: " << s_Firstname << " " << s_Lastname << endl;
+	cout << "Living in: ";
+	s_address.show();
+
+
 }
-
-/* to get city and country use : s_address->getcity , s_address->getcountry*/
- 
-
-seller::seller(char* firstname, char* lastname, char* password, char* country, char* city) : s_address(country, city) 
-{		/*ctor*/
-	 setSellerFirstName(firstname);
-	 setSellerLastName(lastname);
-	 setSellerPassword(password);
-	
-}	
-
- seller :: ~seller() 
- {
-	 /*dtor*/
-	 delete[] f_name;
-	 delete[] l_name;
-	 delete[] s_password;
-	 f_name = nullptr;
-	 l_name = nullptr;
-	 s_password = nullptr;
-	/*city and country dying automaticaly in address dtor*/
- }
-
-
