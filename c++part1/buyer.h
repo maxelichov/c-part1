@@ -1,39 +1,33 @@
-#ifndef buyer.h
-#define buyer.h
+
 #pragma once
-#include <iostream>
-using namespace std;
-#define maxLen 50
+#define CRT_SECURE_NO_WARNINGS
+#pragma warning(disable : 4996)
+#define maxNameLen 26
 
-class feedback
-{
-private:
-	Buyer* b_feedBack;
-	char feedBackDescription[100];
-
-};
+class Address;
+class Item;
 
 class Buyer
 {
 private:
 
-	char* b_name;
+	int ItemIndex = 0;
+	char *b_FirstName;
+	char *b_LastName;
 	Address* b_address;
-	char* b_password;
-	char** b_shopingCart;
+	char* Password;
+	Item** ShoppingCart; // Array of pointers to items
 
 public:
-	
-	Buyer(char* name , Address& buyerAdress , char* bPassword);
+
+	Buyer(char* b_FirstName, char* b_LastName, Address& buyerAdress, char* bPassword);
+	bool setName(char* firstName, char* lastName);
+	bool setPassword(char* password);
+	/*bool setAddress(Address& UserAddress);*/
 	~Buyer();
-	void setName(char* bName);
-	void setPassword(char* password);
-	void setAddress(Address& UserAddress);
-	
+
 
 };
 
 
 
-
-#endif // !"buyer.h"

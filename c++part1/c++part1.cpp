@@ -1,11 +1,13 @@
 #include "pch.h"
+#define CRT_SECURE_NO_WARNINGS
+#pragma warning(disable : 4996)
 #pragma once
 #include <iostream>
 #include "Address.h"
 #include "buyer.h"
 #include "Seller.h"
-#include "shopingcart.h"
 using namespace std;
+
 
 
 
@@ -17,12 +19,10 @@ private:
 	seller* AllSellers;
 };
 
-void main()
+int main()
 {
-		// need to initialize a buyer //
-
-	Buyer firstBuyer();
-
+		
+	/*AddSeller*/ // to do function //
 	
-
+	return 0;
 }
