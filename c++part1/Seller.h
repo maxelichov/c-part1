@@ -1,31 +1,36 @@
-#pragma once
-#define CRT_SECURE_NO_WARNINGS
-#pragma warning(disable : 4996)
+#ifndef __Seller_H
+#define __Seller_H
+
+#include "Address.h"
 
 
-class seller
+
+class Seller
 {
 private:
-	char* f_name; 
-	char* l_name;
-	char* s_password;
-	Address s_address; 
+	char* s_Firstname;
+	char* s_Lastname;
+	char* s_Password;
+	char* s_Username;
+	Address s_address;
 	/*feedback allFeedBacks;*/ // to do//
 	/*Item* allItems;*/
 
 public:
-	
-	seller(char* firstname, char* lastname, char* password, char* country, char* city); /*need to make ctor for address */
-	~seller();											 /*d'tor*/
-	void setSellerFirstName(char* firstname);
-	void setSellerLastName(char* lastname);
-	void setSellerPassword(char* password);
 
-public:
+	Seller(char* s_Firstname, char* s_Lastname, char* s_Username, char* s_Password, char* Country, char* City, char* Street, int& HomeNumber); //C'TOR
+	~Seller();											 /*d'tor*/
+	bool setName(char* Firstname, char* Lastname);
+	bool setUsername(char* Username);
+	bool setPassword(char* Password);
+	void s_show()   const;
 
-	char* getFirstName() const;
-	char* getLastName() const;
-	char* getPassword() const;
+
 };
 
+
+
+
+
+#endif // !__Seller_H
 
