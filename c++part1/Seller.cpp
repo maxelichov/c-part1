@@ -15,8 +15,8 @@ Seller::Seller(char* Fname, char* Lname, char* bUsername, char* bPassword, char*
 	{
 		do
 		{
-			cout << "Error in the input for first name / last name, please try again" << endl;
-			cout << "Enter First name, Last Name" << endl;
+			cout << "Error in the input, please try again!" << endl;
+			cout << "Enter First name,press enter and then Last Name" << endl;
 			cin >> Fname >> Lname;
 			indicator = setName(Fname, Lname);
 
