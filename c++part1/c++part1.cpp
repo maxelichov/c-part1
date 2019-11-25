@@ -4,9 +4,9 @@
 #include "Address.h"
 #include "Buyer.h"
 #include "Seller.h"
-#include "Feedback.h"
-#include "Item.h"
-#include "Shoppingcart.h"
+ //#include "Feedback.h"
+//#include "Item.h"
+//#include "Shoppingcart.h"
 #include <stdio.h>
 using namespace std;
 
