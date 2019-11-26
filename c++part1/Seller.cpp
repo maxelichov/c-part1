@@ -71,7 +71,7 @@ bool Seller::setName(char* firstName, char* lastName)
 	for (i = 0; i < fNameLen; i++)
 	{
 		if (((firstName[i] < 'A') || (firstName[i] > 'Z')) && ((firstName[i] < 'a') || (firstName[i] > 'z')))
-		{
+		{		/* maby need to change "&&" to "||" */ 
 			cout << "Invalid char in first name :" << firstName[i] << endl;
 			return 0;
 		}
