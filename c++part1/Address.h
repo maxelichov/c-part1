@@ -1,20 +1,23 @@
 
 
 #pragma once
-#define CRT_SECURE_NO_WARNINGS
-#pragma warning(disable : 4996)
+
+
+
 class Address
 {
-private:
-	char* country;
-	char* city;
+	char* Country;
+	char* City;
+	char* Street;
+	int HomeNumber;
 
 public:
-
-	Address(char* Country,char* City);
+	Address(char* Country, char* City, char* Street, int& HomeNumber);
+	bool setLocation(char* location, int flag);
+	bool setHomeNumber(int homenumber);
+	void show() const;
 	~Address();
-	void setCountry(char* country);
-	void setCity(char* city);
-	char* getCountry();
-	char* getCity();
+
 };
+
+

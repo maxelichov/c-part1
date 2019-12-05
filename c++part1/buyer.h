@@ -1,31 +1,34 @@
 
 #pragma once
-#define CRT_SECURE_NO_WARNINGS
-#pragma warning(disable : 4996)
-#define maxNameLen 26
+#define maxLen 31
+#include "Address.h"
 
-class Address;
 class Item;
 
 class Buyer
 {
 private:
 
-	int ItemIndex = 0;
-	char *b_FirstName;
-	char *b_LastName;
-	Address* b_address;
-	char* Password;
-	Item** ShoppingCart; // Array of pointers to items
+	int TotalItemsIndex = 0;
+	char* b_Firstname;
+	char* b_Lastname;
+	char* b_Username;
+	char* b_Password;
+	Address b_address;
+	Item** ShoppingCart = nullptr; // deafult when making a buyer will be null;
+	Item** FinalCart = nullptr;
 
 public:
 
-	Buyer(char* b_FirstName, char* b_LastName, Address& buyerAdress, char* bPassword);
+	Buyer(char* b_FirstName, char* b_LastName, char* b_Username, char* bPassword, char* Country, char* City, char* Street, int& HomeNumber);
+	/*Buyer(const Buyer& other);*/
 	bool setName(char* firstName, char* lastName);
+	bool setUsername(char* username);
 	bool setPassword(char* password);
-	/*bool setAddress(Address& UserAddress);*/
-	~Buyer();
+	void b_show() const;
 
+
+	~Buyer();
 
 };
 
