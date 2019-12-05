@@ -9,7 +9,6 @@ using namespace std;
 
 Buyer::Buyer(char* Fname, char* Lname, char* bUsername, char* bPassword, char* Country, char* City, char* Street, int& HomeNumber) : b_address(Country, City, Street, HomeNumber)
 {
-	//test
 	bool indicator;
 	indicator = setName(Fname, Lname);
 	if (!indicator)
