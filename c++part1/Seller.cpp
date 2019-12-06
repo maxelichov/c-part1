@@ -1,4 +1,4 @@
-#include "pch.h"
+
 #include "Seller.h"
 #include "Address.h"
 #include <string.h>
@@ -8,7 +8,7 @@
 using namespace std;
 
 
-Seller::Seller(char* Fname, char* Lname, char* bUsername, char* bPassword, char* Country, char* City, char* Street, int& HomeNumber) : s_address(Country, City, Street, HomeNumber), s_Merch(0, 0)
+Seller::Seller(char* Fname, char* Lname, char* bUsername, char* bPassword, char* Country, char* City, char* Street, int& HomeNumber) : s_address(Country, City, Street, HomeNumber), s_Merch()
 {								// seller ctor //																						// send to address ctor //								// send to merchandise ctor //
 	bool indicator;
 	indicator = setName(Fname, Lname);
@@ -121,17 +121,6 @@ bool Seller::setPassword(char* password)
 
 	return 1;
 
-}
-
-void Seller::AddItemToStock(Item& NewItem,int& category)
-{
-
-	s_Merch.setItemToDepartment(NewItem, category);
-	/*need to allocate and insert the new item to the department/
-	s_Stock.setItemToDepartment(NewItem, department); /*sending the depIndex and the item/
-	*/
-
-	return;
 }
 
 

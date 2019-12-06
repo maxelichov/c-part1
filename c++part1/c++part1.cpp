@@ -213,7 +213,7 @@ void addItem(Seller*** Sellers, int& size)
 
 	for (int i = 0; i < size; i++)
 	{
-		if ((**Sellers)[i].getUsername == username && (**Sellers)[i].getPassword == password) // search for the seller in the system
+		if (strcmp((**Sellers)[i].getUsername , username) == 0 && strcmp((**Sellers)[i].getPassword , password) == 0) // search for the seller in the system
 		{
 			cout << "login successful! Welcome " << username;
 			AddtoSeller(Sellers, i); // After we found our seller in the system, we need to add the item.

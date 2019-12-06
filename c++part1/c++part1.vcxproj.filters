@@ -62,9 +62,6 @@
     <ClCompile Include="Seller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cart.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Merchandise.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

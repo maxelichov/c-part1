@@ -2,6 +2,8 @@
 #include "Merchandise.h"
 #include "Item.h"
 #include "Department.h"
+
+
 enum eCategory { Children, Clothing, Electricity, Office };
 
 Merchandise::Merchandise()  // C'TOR
@@ -34,7 +36,7 @@ void Merchandise::setItemToDepartment(Item& itemToAdd, int& department)
 
 Merchandise::~Merchandise()
 {
-
+	delete[] Departments;
 
 
 }

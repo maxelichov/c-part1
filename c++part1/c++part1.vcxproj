@@ -166,7 +166,6 @@
     <ClCompile Include="Buyer.cpp" />
     <ClCompile Include="c++part1.cpp" />
     <ClCompile Include="Address.cpp" />
-    <ClCompile Include="cart.cpp" />
     <ClCompile Include="Department.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="ItemList.cpp" />

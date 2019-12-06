@@ -19,8 +19,6 @@ Item ::~Item()// dtor//
    // when item is sold to a buyer we need delete from sellers stock and add to buyer //
 	delete[] ItemName;
 	ItemName = nullptr;
-	delete[] ItemSerialNumber;
-	ItemSerialNumber = nullptr; // no deletion beacuse item goes to the buyer // /*to do!*/
 
 }
 
@@ -75,9 +73,9 @@ int	Item::getItemPrice()
 
 	return ItemPrice;
 }
-char* Item::getItemSerialNumber()
+int Item::getItemSerialNumber()
 {
-	return ItemSerialNumber;
+	return SerialNumber;
 
 }
 
