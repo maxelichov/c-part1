@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Seller.h"
 #include "Address.h"
 #include <string.h>
@@ -7,11 +8,11 @@
 using namespace std;
 
 
-Seller::Seller(char* Fname, char* Lname, char* bUsername, char* bPassword, char* Country, char* City, char* Street, int& HomeNumber) : s_address(Country, City, Street, HomeNumber)
-{
+Seller::Seller(char* Fname, char* Lname, char* bUsername, char* bPassword, char* Country, char* City, char* Street, int& HomeNumber) : s_address(Country, City, Street, HomeNumber), s_Merch(0, 0)
+{								// seller ctor //																						// send to address ctor //								// send to merchandise ctor //
 	bool indicator;
 	indicator = setName(Fname, Lname);
-	if (!indicator)
+	if (indicator == 0)
 	{
 		do
 		{
@@ -23,7 +24,7 @@ Seller::Seller(char* Fname, char* Lname, char* bUsername, char* bPassword, char*
 		} while (!indicator);
 	}
 	indicator = setUsername(bUsername);
-	if (!indicator)
+	if (indicator == 0)
 	{
 		do
 		{
@@ -31,7 +32,7 @@ Seller::Seller(char* Fname, char* Lname, char* bUsername, char* bPassword, char*
 			cin >> bUsername;
 			indicator = setUsername(bUsername);
 
-		} while (!indicator);
+		} while (indicator == 0);
 
 	}
 	indicator = setPassword(bPassword);
@@ -71,7 +72,7 @@ bool Seller::setName(char* firstName, char* lastName)
 	for (i = 0; i < fNameLen; i++)
 	{
 		if (((firstName[i] < 'A') || (firstName[i] > 'Z')) && ((firstName[i] < 'a') || (firstName[i] > 'z')))
-		{		/* maby need to change "&&" to "||" */ 
+		{
 			cout << "Invalid char in first name :" << firstName[i] << endl;
 			return 0;
 		}
@@ -80,7 +81,7 @@ bool Seller::setName(char* firstName, char* lastName)
 	for (i = 0; i < LNameLen; i++)
 	{
 		if (((lastName[i] < 'A') || (lastName[i] > 'Z')) && ((lastName[i] < 'a') || (lastName[i] > 'z')))
-		{
+		{		// making sure the name is valid //
 			cout << "Invalid char in last name :" << lastName[i] << endl;
 			return 0;
 		}
@@ -89,8 +90,6 @@ bool Seller::setName(char* firstName, char* lastName)
 	s_Lastname = new char[maxLen];
 	strcpy(s_Firstname, firstName);
 	strcpy(s_Lastname, lastName);
-	return 1;
-
 	return 1;
 }
 
@@ -124,6 +123,17 @@ bool Seller::setPassword(char* password)
 
 }
 
+void Seller::AddItemToStock(Item& NewItem,int& category)
+{
+
+	s_Merch.setItemToDepartment(NewItem, category);
+	/*need to allocate and insert the new item to the department/
+	s_Stock.setItemToDepartment(NewItem, department); /*sending the depIndex and the item/
+	*/
+
+	return;
+}
+
 
 Seller::~Seller() // D'TOR
 {
@@ -142,3 +152,23 @@ void Seller::s_show() const
 
 
 }
+
+char* Seller::getUsername() const
+{
+	return(this->s_Username);
+}
+
+char* Seller::getPassword() const
+{
+	return(this->s_Password);
+}
+
+void Seller::AddItemToStock(Item& NewItem,int& Category)
+{
+	s_Merch.setItemToDepartment(NewItem, Category);
+}
+
+/*int checkCategory(Seller& seller)
+{
+
+}*/

@@ -1,6 +1,5 @@
-#ifndef __Buyer_h
-#define __Buyer_h
 
+#pragma once
 #define maxLen 31
 #include "Address.h"
 
@@ -35,4 +34,3 @@ public:
 
 
 
-#endif // !__Buyer_h

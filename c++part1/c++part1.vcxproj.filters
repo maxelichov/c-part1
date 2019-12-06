@@ -30,7 +30,19 @@
     <ClInclude Include="cart.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sellersmerch.h">
+    <ClInclude Include="Merchandise.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Department.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,7 +65,19 @@
     <ClCompile Include="cart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sellersmerch.cpp">
+    <ClCompile Include="Merchandise.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Department.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

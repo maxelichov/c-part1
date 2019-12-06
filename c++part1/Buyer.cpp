@@ -1,3 +1,6 @@
+
+
+#include "pch.h"
 #include "buyer.h"
 #include "Address.h"
 //#include "Shoppingcart.h"
@@ -167,4 +170,3 @@ void Buyer::b_show() const
 //	FinalCart = new Item * (*other.FinalCart);
 //
 //}
-

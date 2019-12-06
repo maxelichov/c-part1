@@ -1,19 +1,26 @@
+
 #pragma once
+
 #include "pch.h"
 #include <iostream>
 #include "Address.h"
 #include "Buyer.h"
 #include "Seller.h"
- //#include "Feedback.h"
-//#include "Item.h"
+//#include "Feedback.h"
 //#include "Shoppingcart.h"
 #include <stdio.h>
+#include "Item.h"
+#include "Merchandise.h"
+#include "ItemNode.h"
+
 using namespace std;
 
 #define maxLen 31
-
 using namespace std;
 constexpr auto EXIT = 11;
+enum eCategory { Children, Clothing, Electricity, Office };
+const char* Categories[] = { "Children" , "Clothing" , "Electricity" , "Office" };
+#define TotalCategories 4
 
 //FUNCTION'S DECLARATIONS :
 
@@ -26,6 +33,21 @@ void ExecuteChoice(int& MenuChoice, Buyer*** AllBuyers, int& TotalBuyersLogSize,
 void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSize, int& Choice, Seller*** AllSellers, int& TotalSellerslogSize,
 	int& TotalSellersPhysSize);
 void cleanBuffer();
+void addItem(Seller*** Sellers, int& size);
+void AddtoSeller(Seller*** Sellers, int& index);
+void addItemToSeller(Seller*** Sellers, int& index, Item* item);
+
+
+
+
+/*void addItemToSellersStock()
+{
+	cout << "enter the name of the item" << endl;
+	char* itemName = cin.get;
+}*/
+
+
+
 
 
 int main()
@@ -71,7 +93,7 @@ void displayMenu()
 
 }
 
-bool validateChoice(int& MenuChoice)
+bool validateChoice(int& MenuChoice) // sending by ref for efficency //
 {
 	if (MenuChoice >= 1 && MenuChoice <= 11)
 		return 1;
@@ -92,6 +114,8 @@ void ExecuteChoice(int& MenuChoice, Buyer*** AllBuyers, int& TotalBuyersLogSize,
 		addUser(AllBuyers, TotalBuyersLogSize, TotalBuyersPhysSize, MenuChoice, AllSellers, TotalSellerslogSize, TotalSellersPhysSize);
 		break;
 
+		case 3: // Add new item to seller
+		addItem(AllSellers,TotalSellerslogSize);
 	}
 
 }
@@ -110,9 +134,10 @@ void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSi
 	cout << "Enter last name (Max 30 chars and only letters) : " << endl;
 	cin >> lname;
 	cout << "Enter Username (Max 30 chars) : " << endl;
-	cin >> username;
+	cin.getline(username,maxLen);
+	cleanBuffer();
 	cout << "Enter Password (Max 30 chars) :" << endl;
-	cin >> password;
+    cin.getline(password,maxLen);
 	cout << "Enter Country,press enter and then a City (Max 30 chars per location)  :" << endl;
 	cleanBuffer();
 	cin.getline(country, maxLen);
@@ -124,7 +149,7 @@ void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSi
 	if (Choice == 1) // need to add buyer.
 	{
 		if (*AllBuyers == nullptr) // If the array of pointers to buyers is null then make a room for one.
-			*AllBuyers = new Buyer * [TotalBuyersPhysSize];
+			*AllBuyers = new Buyer *[TotalBuyersPhysSize];
 
 		else if (TotalBuyerslogSize == TotalBuyersPhysSize) // need to make more size into the buyers arr.
 		{
@@ -139,7 +164,7 @@ void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSi
 	{
 
 		if (*AllSellers == nullptr)
-			*AllSellers = new Seller * [TotalSellersPhysSize];
+			*AllSellers = new Seller *[TotalSellersPhysSize];
 
 		else if (TotalSellerslogSize == TotalSellersPhysSize)
 		{
@@ -166,7 +191,7 @@ void cleanBuffer()
 
 Buyer** ResizeBuyersArr(Buyer** Arr, int Logsize, int PhysSize) // Increase buyers arr
 {
-	Buyer** NewArr = new Buyer * [PhysSize];
+	Buyer** NewArr = new Buyer *[PhysSize];
 
 	memcpy(NewArr, Arr, Logsize * sizeof(Buyer*)); // Copy the pointers from old Arr to NewArr with bigger size.
 
@@ -175,13 +200,100 @@ Buyer** ResizeBuyersArr(Buyer** Arr, int Logsize, int PhysSize) // Increase buye
 	return NewArr;
 }
 
+void addItem(Seller*** Sellers, int& size)
+{
+	char username[maxLen], password[maxLen];
+	cout << " Please log in to the system in order to add an item to your merchandise" << endl;
+	cout << "Please enter your username: " << endl;
+	cin.getline(username, maxLen);
+	cleanBuffer();
+	cout << "Please enter your password: " << endl;
+	cin.getline(password, maxLen);
+	cleanBuffer();
+
+	for (int i = 0; i < size; i++)
+	{
+		if ((**Sellers)[i].getUsername == username && (**Sellers)[i].getPassword == password) // search for the seller in the system
+		{
+			cout << "login successful! Welcome " << username;
+			AddtoSeller(Sellers, i); // After we found our seller in the system, we need to add the item.
+			return;
+		}
+	}
+	cout << "Unsuccessful login! Wrong username or password" << endl;
+	return;
+
+}
+
+void AddtoSeller(Seller*** Sellers, int& index)
+{
+	int Category, price;
+	char ItemName[ItemNameMAXlen];
+	cout << "Select the item category: " << endl;
+	for (int i = 0; i < TotalCategories; i++)
+		cout << i << " - " << Categories[i] << endl;
+
+	cin >> Category;
+	cout << "Enter your item name (max of 50 chars):" << endl;
+	cin.getline(ItemName, ItemNameMAXlen);
+	cout << "Enter price of your item :" << endl;
+	cin >> price;
+
+	Item* item = new Item(ItemName, price,Category); // Make a new item 
+	addItemToSeller(Sellers, index, item);
+}
+
+void addItemToSeller(Seller*** Sellers, int& index, Item* item)
+{
+	(**Sellers)[index].AddItemToStock(*item, *item->getItemCategory); // Add the item to the seller's merch
+
+}
+
+
+
 Seller** ResizeSellersArr(Seller** Arr, int Logsize, int PhysSize) // Increase sellers arr
 {
-	Seller** NewArr = new Seller * [PhysSize];
+	Seller** NewArr = new Seller *[PhysSize];
 
 	memcpy(NewArr, Arr, Logsize * sizeof(Seller*)); // Copy the pointers from old Arr to NewArr with bigger size.
 
 	delete[]Arr;
 
 	return NewArr;
+
+	
+
+	//Seller testSeller(fname , lname, username, password, country, city, street, homenumber);
+	//testSeller.AddItemToStock(newItem);
+
+/*	testSeller.AddItemToStock(newItem);*/
+	 // now we need to add an item to sellers merchandise //
+	
+
+
+
 }
+
+
+//char name[] = "toyCar";
+//char secondName[] = "sometoy";
+//char serialNum[] = "123abc";
+//char secondSerialNum[] = "321xyz";
+//int price = 50;
+//int x, y;
+//char fname[] = "max";
+//char lname[] = "elichov";
+//char password[] = "12345";
+//char username[] = "maxelichov99";
+//char country[] = "israel";
+//char city[] = "tel aviv";
+//char street[] = "nahlat binyamin";
+//int homenumber = 9;
+//eCategory itemCategory = (eCategory)1;
+//eCategory second = (eCategory)1;
+//Merchandise sellerMerch;
+//Item newItem(name, price, serialNum, itemCategory);
+//Item secondItem(secondName, 40, secondSerialNum, second);
+//Department dep(itemCategory);
+//dep.addItem(newItem);
+//dep.addItem(secondItem);

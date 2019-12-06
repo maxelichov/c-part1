@@ -1,6 +1,7 @@
+
+
 #pragma once
-#ifndef __Address_H
-#define __Address_H
+
 
 
 class Address
@@ -20,4 +21,3 @@ public:
 };
 
 
-#endif // !__Adress_H
