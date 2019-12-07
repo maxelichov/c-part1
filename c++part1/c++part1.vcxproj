@@ -23,7 +23,7 @@
     <ProjectGuid>{00C980AB-396F-4D3B-BBB8-F23DA95802EF}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>cpart1</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -171,7 +171,6 @@
     <ClCompile Include="ItemList.cpp" />
     <ClCompile Include="ItemNode.cpp" />
     <ClCompile Include="Merchandise.cpp" />
-    <ClCompile Include="pch.cpp" />
     <ClCompile Include="Seller.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -15,8 +15,7 @@ using namespace std;
 
 #define maxLen 31
 using namespace std;
-constexpr auto EXIT = 11;
-enum eCategory { Children, Clothing, Electricity, Office };
+#define EXIT 11
 const char* Categories[] = { "Children" , "Clothing" , "Electricity" , "Office" };
 #define TotalCategories 4
 
@@ -43,9 +42,6 @@ void addItemToSeller(Seller** Sellers, int& index, Item* item);
 	cout << "enter the name of the item" << endl;
 	char* itemName = cin.get;
 }*/
-
-
-
 
 
 int main()
@@ -75,7 +71,6 @@ int main()
 	cout << "Exiting Program";
 
 	return 1;
-
 }
 
 

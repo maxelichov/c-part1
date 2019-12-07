@@ -4,8 +4,6 @@
 #include "Department.h"
 
 
-enum eCategory { Children, Clothing, Electricity, Office };
-
 Merchandise::Merchandise()  // C'TOR
 {
 	NumOfDepartments = 0;
