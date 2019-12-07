@@ -65,7 +65,6 @@ bool Item::setItemName(const char* name)
 
 	ItemName = new char[length+1];
 	strcpy(ItemName, name);
-	delete[] name;
 	return true;
 	
 }

@@ -127,12 +127,11 @@ void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSi
 	cout << "Enter last name (Max 30 chars and only letters) : " << endl;
 	cin >> lname;
 	cout << "Enter Username (Max 30 chars) : " << endl;
-	cin.getline(username,maxLen);
 	cleanBuffer();
+	cin.getline(username,maxLen);
 	cout << "Enter Password (Max 30 chars) :" << endl;
     cin.getline(password,maxLen);
 	cout << "Enter Country,press enter and then a City (Max 30 chars per location)  :" << endl;
-	cleanBuffer();
 	cin.getline(country, maxLen);
 	cin.getline(city, maxLen);
 	cout << "Enter Street,press enter and then Homenumber :" << endl;
@@ -199,16 +198,14 @@ void addItem(Seller** Sellers, int& size)
 	cout << " Please log in to the system in order to add an item to your merchandise" << endl;
 	cout << "Please enter your username: " << endl;
 	cin.getline(username, maxLen);
-	cleanBuffer();
 	cout << "Please enter your password: " << endl;
 	cin.getline(password, maxLen);
-	cleanBuffer();
 
 	for (int i = 0; i < size; i++)
 	{
 		if (strcmp((*Sellers)[i].getUsername(), username) == 0 && strcmp((*Sellers)[i].getPassword() , password) == 0) // search for the seller in the system
 		{
-			cout << "login successful! Welcome " << username;
+			cout << "login successful! Welcome " << username <<"!" << endl;
 			AddtoSeller(Sellers, i); // After we found our seller in the system, we need to add the item.
 			return;
 		}
@@ -222,14 +219,14 @@ void AddtoSeller(Seller** Sellers, int& index) // recieves the sellers array and
 {
 	int Category, price;
 	char ItemName[ItemNameMAXlen];
-	cout << "Select the item category: " << endl;
+	cout << "Please Select your item category that you wanna add: " << endl;
 	for (int i = 0; i < TotalCategories; i++)
 		cout << i << " - " << Categories[i] << endl;
 
 	cin >> Category;
 	cout << "Enter your item name (max of 50 chars):" << endl;
-	cin.getline(ItemName, ItemNameMAXlen);
 	cleanBuffer();
+	cin.getline(ItemName, ItemNameMAXlen);
 	cout << "Enter the price of your item :" << endl;
 	cin >> price;
 

@@ -91,8 +91,6 @@ bool Buyer::setName(char* firstName, char* lastName)
 	b_Lastname = new char[maxLen];
 	strcpy(b_Firstname, firstName);
 	strcpy(b_Lastname, lastName);
-	delete[] firstName;
-	delete[] lastName; // to check if really needed.
 
 	return 1;
 }
