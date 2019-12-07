@@ -13,8 +13,6 @@ private:
 	int ItemPrice;
 	int SerialNumber;
 	eCategory itemCategory;
-
-
 public:
 	Item() = default;
 	Item(char* name, int price,int category); // ctor //
@@ -27,7 +25,5 @@ public:
 	char* getItemName();
 	int		getItemPrice();
 	int getItemSerialNumber();
-	int		getItemCategory();
+	int	getItemCategory();
 };
-
-int Item::ItemSerialNumber = 0;

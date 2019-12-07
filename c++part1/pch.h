@@ -1,3 +1,4 @@
+#pragma once
 // Tips for Getting Started: 
 //   1. Use the Solution Explorer window to add/manage files
 //   2. Use the Team Explorer window to connect to source control
@@ -9,6 +10,9 @@
 #ifndef PCH_H
 #define PCH_H
 
+
+
 // TODO: add headers that you want to pre-compile here
+
 
 #endif //PCH_H

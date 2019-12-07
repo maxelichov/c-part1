@@ -13,9 +13,10 @@ private:
 
 public:
 	Department();
-	Department(int departmentName);
+	Department(int& departmentName);
 
 	void addItem(Item& item);
+	int getDepartment();
 
 	~Department();
 };

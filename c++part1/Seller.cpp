@@ -1,8 +1,9 @@
-
+#include "pch.h"
 #include "Seller.h"
 #include "Address.h"
 #include <string.h>
 #include <iostream>
+
 #define maxLen 31
 #pragma warning(disable: 4996)
 using namespace std;
@@ -144,15 +145,15 @@ void Seller::s_show() const
 
 char* Seller::getUsername() const
 {
-	return(this->s_Username);
+	return s_Username;
 }
 
 char* Seller::getPassword() const
 {
-	return(this->s_Password);
+	return s_Password;
 }
 
-void Seller::AddItemToStock(Item& NewItem,int& Category)
+void Seller::AddItemToStock(Item& NewItem,int Category)
 {
 	s_Merch.setItemToDepartment(NewItem, Category);
 }

@@ -1,5 +1,4 @@
-
-
+#include "pch.h"
 #include "buyer.h"
 #include "Address.h"
 //#include "Shoppingcart.h"
@@ -92,7 +91,8 @@ bool Buyer::setName(char* firstName, char* lastName)
 	b_Lastname = new char[maxLen];
 	strcpy(b_Firstname, firstName);
 	strcpy(b_Lastname, lastName);
-	return 1;
+	delete[] firstName;
+	delete[] lastName; // to check if really needed.
 
 	return 1;
 }

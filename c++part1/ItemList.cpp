@@ -5,15 +5,13 @@
 
 ItemList::ItemList() 
 {
+	size = 0;
 	head = tail = nullptr;
 }
 
-void ItemList::insert(Item& item) {
-	/*
-	Check if item (serial number) already exists
-	*/
-
-	ItemNode* newItem = new ItemNode(item);
+void ItemList::insert(Item& item) 
+{
+	  ItemNode* newItem = new ItemNode(item);
 
 	if (head == nullptr) // meaning the list is empty.
 	{

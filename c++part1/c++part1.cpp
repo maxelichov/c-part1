@@ -1,7 +1,6 @@
-
 #pragma once
-
 #include "pch.h"
+#include "Item.h"
 #include <iostream>
 #include "Address.h"
 #include "Buyer.h"
@@ -9,7 +8,6 @@
 //#include "Feedback.h"
 //#include "Shoppingcart.h"
 #include <stdio.h>
-#include "Item.h"
 #include "Merchandise.h"
 #include "ItemNode.h"
 
@@ -33,9 +31,9 @@ void ExecuteChoice(int& MenuChoice, Buyer*** AllBuyers, int& TotalBuyersLogSize,
 void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSize, int& Choice, Seller*** AllSellers, int& TotalSellerslogSize,
 	int& TotalSellersPhysSize);
 void cleanBuffer();
-void addItem(Seller*** Sellers, int& size);
-void AddtoSeller(Seller*** Sellers, int& index);
-void addItemToSeller(Seller*** Sellers, int& index, Item* item);
+void addItem(Seller** Sellers, int& size);
+void AddtoSeller(Seller** Sellers, int& index);
+void addItemToSeller(Seller** Sellers, int& index, Item* item);
 
 
 
@@ -115,7 +113,7 @@ void ExecuteChoice(int& MenuChoice, Buyer*** AllBuyers, int& TotalBuyersLogSize,
 		break;
 
 		case 3: // Add new item to seller
-		addItem(AllSellers,TotalSellerslogSize);
+		addItem(*AllSellers,TotalSellerslogSize);
 	}
 
 }
@@ -200,7 +198,7 @@ Buyer** ResizeBuyersArr(Buyer** Arr, int Logsize, int PhysSize) // Increase buye
 	return NewArr;
 }
 
-void addItem(Seller*** Sellers, int& size)
+void addItem(Seller** Sellers, int& size)
 {
 	char username[maxLen], password[maxLen];
 	cout << " Please log in to the system in order to add an item to your merchandise" << endl;
@@ -213,7 +211,7 @@ void addItem(Seller*** Sellers, int& size)
 
 	for (int i = 0; i < size; i++)
 	{
-		if (strcmp((**Sellers)[i].getUsername , username) == 0 && strcmp((**Sellers)[i].getPassword , password) == 0) // search for the seller in the system
+		if (strcmp((*Sellers)[i].getUsername(), username) == 0 && strcmp((*Sellers)[i].getPassword() , password) == 0) // search for the seller in the system
 		{
 			cout << "login successful! Welcome " << username;
 			AddtoSeller(Sellers, i); // After we found our seller in the system, we need to add the item.
@@ -225,7 +223,7 @@ void addItem(Seller*** Sellers, int& size)
 
 }
 
-void AddtoSeller(Seller*** Sellers, int& index)
+void AddtoSeller(Seller** Sellers, int& index) // recieves the sellers array and the index of which seller want to add the item.
 {
 	int Category, price;
 	char ItemName[ItemNameMAXlen];
@@ -236,16 +234,18 @@ void AddtoSeller(Seller*** Sellers, int& index)
 	cin >> Category;
 	cout << "Enter your item name (max of 50 chars):" << endl;
 	cin.getline(ItemName, ItemNameMAXlen);
-	cout << "Enter price of your item :" << endl;
+	cleanBuffer();
+	cout << "Enter the price of your item :" << endl;
 	cin >> price;
 
-	Item* item = new Item(ItemName, price,Category); // Make a new item 
+	Item* item = new Item(ItemName, price,Category); // Make a new item from the data we got about it.
 	addItemToSeller(Sellers, index, item);
 }
 
-void addItemToSeller(Seller*** Sellers, int& index, Item* item)
+void addItemToSeller(Seller** Sellers, int& index,Item* item )
 {
-	(**Sellers)[index].AddItemToStock(*item, *item->getItemCategory); // Add the item to the seller's merch
+
+	(*Sellers)[index].AddItemToStock(*item,item->getItemCategory()); // Add the item to the seller's merch
 
 }
 

@@ -26,7 +26,7 @@ public:
 	char* getPassword() const;
 	void s_show()   const;
 	bool CheckSellerItemStock(Seller& seller);
-	void AddItemToStock(Item& NewItem,int& Category); //  to do
+	void AddItemToStock(Item& NewItem,int Category); //  to do
 
 
 };

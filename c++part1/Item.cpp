@@ -1,16 +1,51 @@
+#include "pch.h"
 #include "Item.h"
 #include <iostream>
+#define TotalCategories 4
+#pragma warning(disable : 4996)
 using namespace std;
+int Item::ItemSerialNumber;
+
 
 
 Item::Item(char* name, int price,int category) : SerialNumber(++ItemSerialNumber)  // ctor //
 {
-	setItemName(name);
-	setItemPrice(price);
-	setCategory(category);
+	bool res;
+	res = setItemName(name);
+	do {
+		if (!res)
+		{
+			cout << "Invalid item name please re-enter name(max 50 chars): " << endl;
+			cin >> name;
+			res = setItemName(name);
+		}
+
+	} while (!res);
+
+	res = setItemPrice(price);
+	do {
+		if (!res)
+		{
+			cout << "Invalid price please re-enter price: " << endl;
+			cin >> price;
+			res = setItemPrice(price);
+		}
+
+	} while (!res);
+
+	res = setCategory(category);
+	do {
+		if (!res)
+		{
+			cout << "Invalid category entered, please re-enter category: " << endl;
+			cout << "0 - Children" << endl << "1 - Clothing" << endl << "2 - Electricity" << endl <<
+				"3 - Office";
+
+			cin >> category;
+			res = setCategory(category);
+		} 
+	} while (!res);
 }
-
-
 
 
 Item ::~Item()// dtor//
@@ -24,22 +59,23 @@ Item ::~Item()// dtor//
 
 bool Item::setItemName(const char* name)
 {
-	if (ItemName != nullptr) {
-		delete ItemName;
-	}
-	// item name can include letters and digits so need to think ..... //
-	ItemName = strdup(name);
+	int length = strlen(name);
+	if (length < 1 || length > ItemNameMAXlen)
+		return false;
+
+	ItemName = new char[length+1];
+	strcpy(ItemName, name);
+	delete[] name;
 	return true;
+	
 }
 
 bool Item::setItemPrice(int price)
 {
 	// only problem is if price is equal to zero or negative number //
 	if (price <= 0)
-	{
-		cout << "invalid price" << endl;
-		return 0;
-	}
+		return false;
+
 	ItemPrice = price;
 	return true;
 }
@@ -51,14 +87,12 @@ bool Item::setItemPrice(int price)
 }*/
 
 bool Item::setCategory(int newCategory)
-{
-	int index = newCategory;
-	if (index >= 0 && index <= 4)
+{ 
+	if (newCategory >= 0 && newCategory <= 4)
 	{
 		itemCategory = (eCategory)newCategory;
 		return true;
 	}
-	cout << "Invalid Category " << endl;
 	return false;
 }
 
@@ -80,7 +114,6 @@ int Item::getItemSerialNumber()
 }
 
 int  Item::getItemCategory()
-{
-	int index = (int)itemCategory;					/////need to fix ///////
-	return  index;
+{		
+	return  (int)itemCategory;
 }

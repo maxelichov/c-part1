@@ -8,9 +8,9 @@ class Merchandise
 {
 private:
 
-	int NumOfDepartments = 0;
-	int TotalNumOfItems = 0;
-	Department* Departments[TotalDepartments]; // allocate dynamic?
+	int NumOfDepartments;
+	int TotalNumOfItems;
+	Department* Departments[TotalDepartments];
 
 
 public:

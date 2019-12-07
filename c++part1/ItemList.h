@@ -20,7 +20,5 @@ public:
 	int getSize();
 	bool isEmpty();
 
-	
-
 	~ItemList(); // for(all nodes) { delete node}
 };
