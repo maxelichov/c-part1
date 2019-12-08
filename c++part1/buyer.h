@@ -4,9 +4,9 @@
 #include "Address.h"
 
 class Item;
-
+/* testtttttttttttttttttttttttttttttt*/
 class Buyer
-{
+{ 
 private:
 
 	int TotalItemsIndex = 0;
