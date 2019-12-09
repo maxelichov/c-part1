@@ -12,7 +12,7 @@
 #include "ItemNode.h"
 
 using namespace std;
-
+#define maxFidbackLen 100
 #define maxLen 31
 using namespace std;
 #define EXIT 11
@@ -21,8 +21,7 @@ const char* Categories[] = { "Children" , "Clothing" , "Electricity" , "Office" 
 
 //FUNCTION'S DECLARATIONS :
 
-Buyer** ResizeBuyersArr(Buyer** Arr, int Logsize, int PhysSize);
-Seller** ResizeSellersArr(Seller** Arr, int Logsize, int PhysSize);
+
 void displayMenu();
 bool validateChoice(int& MenuChoice);
 void ExecuteChoice(int& MenuChoice, Buyer*** AllBuyers, int& TotalBuyersLogSize, int& TotalBuyersPhysSize,
@@ -35,15 +34,6 @@ void AddtoSeller(Seller* Sellers, int& index);
 void addItemToSeller(Seller* Sellers, int& index, Item* item);
 
 
-
-
-/*void addItemToSellersStock()
-{
-	cout << "enter the name of the item" << endl;
-	char* itemName = cin.get;
-}*/
-
-
 int main()
 {
 	int MenuChoice;
@@ -52,47 +42,34 @@ int main()
 	int TotalSellerslogSize = 0, TotalSellersPhysSize = 1;
 	Buyer** AllBuyers = nullptr;
 	Seller** AllSellers = nullptr;
-
 	do {
 		displayMenu();
 		cin >> MenuChoice;
 		Input = validateChoice(MenuChoice);
 		cleanBuffer();
-
 		if (Input)
 			ExecuteChoice(MenuChoice, &AllBuyers, TotalBuyerslogSize, TotalBuyersPhysSize, &AllSellers,
 				TotalSellerslogSize, TotalSellersPhysSize);
-
 		else
 			cout << "Invalid number entered please try again!" << endl;
-
 	} while (MenuChoice != EXIT);
-
 	cout << "Exiting Program";
-
 	return 1;
 }
-
-
-
 void displayMenu()
 {
-
 	cout << "Welcome to our Interactive Menu please choose one of the following by entering the number of it :" << endl;
 	cout << "1. Add a buyer " << endl << "2. Add a seller " << endl << "3. Add an item to a seller"
 		<< endl << "4. Add a feedback to a seller" << endl << "5. Add an item to your shopping cart" <<
 		endl << "6. Make an order" << endl << "7. Make a payment " << endl << "8. Show all buyers info" <<
 		endl << "9. Show all Sellers info" << endl << "10. Show All the Items with the same name" << endl << "11. Exit program" << endl;
-
 }
-
 bool validateChoice(int& MenuChoice) // sending by ref for efficency //
 {
 	if (MenuChoice >= 1 && MenuChoice <= 11)
 		return 1;
 	else
 		return 0;
-
 }
 
 void ExecuteChoice(int& MenuChoice, Buyer*** AllBuyers, int& TotalBuyersLogSize, int& TotalBuyersPhysSize,
@@ -105,18 +82,56 @@ void ExecuteChoice(int& MenuChoice, Buyer*** AllBuyers, int& TotalBuyersLogSize,
 		break;
 	case 2: // Add seller case
 		addUser(AllBuyers, TotalBuyersLogSize, TotalBuyersPhysSize, MenuChoice, AllSellers, TotalSellerslogSize, TotalSellersPhysSize);
-		break;
-																			/* test : sending  &AllSellers */
+		break;											
 		case 3: // Add new item to seller
-		addItem(*AllSellers,TotalSellerslogSize); /*TODO*/
+		addItem(*AllSellers,TotalSellerslogSize);
+		case 4: // add fidback to seller
+			addFidback(*AllBuyers, *AllSellers , TotalSellerslogSize); // TODO
 	}
-	/*  TODO : the index of the department doesnt match the eCategory. example : clothing is (3) and it appears in Department[1]*/
+}
+bool FindSeller(Seller** AllSellers, int* position , int TotalSellerslogSize , char* name)  //
+{
+	//function that checks if the seller exists //
+	for (int i = 0; i < TotalSellerslogSize; i++)
+	{
+		if (strcmp(AllSellers[i]->getUsername, name) == 0)
+		{
+			return true;
+		}
+		*position++;
+	}
+	return false;
 }
 
+void GiveFidbackToSeller(Seller* TheSeller , char* fidback) // friend fucntion of Seller obj? //
+{
+	
+}
+void addFidback(Buyer** AllBuyers, Seller** AllSellers , int TotalSellerslogSize)
+{	/*need to login as buyers before adding a fidback*/
+	int position = 0;
+	char fidback[maxFidbackLen];
+	char SellerName[maxLen];
+	cout << "please enter the user name of the seller you wish to give a fidback to " << endl;
+	
+	bool found = FindSeller(AllSellers, &position , TotalSellerslogSize , SellerName);
+	if (!found)
+	cout << "the name you enterd does not exist in the system. please try again." << endl; 
+	else
+	{
+			/* bool ifPurchased == true*/					// need to check if buyer purchased from seller
+		cout << "please enter the fidback you want to give to the seller (max 100 letters)" << endl;
+		cleanBuffer();
+		cin.getline(fidback, maxFidbackLen);
+		// insert the fidback to the seller //
+		GiveFidbackToSeller(AllSellers[position] , fidback);
+	}
+		
+	
+}
 void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSize, int& Choice, Seller*** AllSellers, int& TotalSellerslogSize,
 	int& TotalSellersPhysSize) // function for both to add buyer and seller instead of 2 funcs.
 {
-
 	char fname[maxLen], lname[maxLen], password[maxLen], username[maxLen], country[maxLen],
 		city[maxLen], street[maxLen];
 	int homenumber;
@@ -181,16 +196,7 @@ void cleanBuffer()
 }
 
 
-Buyer** ResizeBuyersArr(Buyer** Arr, int Logsize, int PhysSize) // Increase buyers arr
-{
-	Buyer** NewArr = new Buyer *[PhysSize];
 
-	memcpy(NewArr, Arr, Logsize * sizeof(Buyer*)); // Copy the pointers from old Arr to NewArr with bigger size.
-
-	delete[]Arr;
-
-	return NewArr;
-}
 
 void addItem(Seller** Sellers, int& size)
 {
@@ -243,49 +249,3 @@ void addItemToSeller(Seller* TheSeller, int& index,Item* item )
 
 
 
-Seller** ResizeSellersArr(Seller** Arr, int Logsize, int PhysSize) // Increase sellers arr
-{
-	Seller** NewArr = new Seller *[PhysSize];
-
-	memcpy(NewArr, Arr, Logsize * sizeof(Seller*)); // Copy the pointers from old Arr to NewArr with bigger size.
-
-	delete[]Arr;
-	Arr = nullptr;
-	return NewArr;
-
-	
-
-	//Seller testSeller(fname , lname, username, password, country, city, street, homenumber);
-	//testSeller.AddItemToStock(newItem);
-
-/*	testSeller.AddItemToStock(newItem);*/
-	 // now we need to add an item to sellers merchandise //
-	
-
-
-
-}
-
-
-//char name[] = "toyCar";
-//char secondName[] = "sometoy";
-//char serialNum[] = "123abc";
-//char secondSerialNum[] = "321xyz";
-//int price = 50;
-//int x, y;
-//char fname[] = "max";
-//char lname[] = "elichov";
-//char password[] = "12345";
-//char username[] = "maxelichov99";
-//char country[] = "israel";
-//char city[] = "tel aviv";
-//char street[] = "nahlat binyamin";
-//int homenumber = 9;
-//eCategory itemCategory = (eCategory)1;
-//eCategory second = (eCategory)1;
-//Merchandise sellerMerch;
-//Item newItem(name, price, serialNum, itemCategory);
-//Item secondItem(secondName, 40, secondSerialNum, second);
-//Department dep(itemCategory);
-//dep.addItem(newItem);
-//dep.addItem(secondItem);
