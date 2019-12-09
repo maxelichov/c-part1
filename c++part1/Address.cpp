@@ -67,7 +67,7 @@ bool Address::setLocation(char* location, int flag) // if flag == 0 set country 
 	if (len == 0 || len >= maxLen)
 		return 0;
 
-	for (int i = 0; i < len; i++)
+	for (int i = 0; i < len; i++) 
 	{
 		if (location[i] < 'A' || ((location[i] > 'Z') && (location[i] < 'a')) || location[i] > 'z')
 		{
@@ -90,20 +90,20 @@ bool Address::setLocation(char* location, int flag) // if flag == 0 set country 
 	}
 
 	if (flag == 0) {
-		Country = new char[strlen(location) + 1];
+		Country = new char[strlen(location) + 1];/*need to change to strdup*/
 		strcpy(Country, location);
 		return 1;
 
 	}
 	else if (flag == 1)
-	{
+	{		/*need to change to strdup*/
 		City = new char[strlen(location) + 1];
 		strcpy(City, location);
 		return 1;
 
 	}
 	else if (flag == 2)
-	{
+	{		/*need to change to strdup*/
 		Street = new char[strlen(location) + 1];
 		strcpy(Street, location);
 		return 1;

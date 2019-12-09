@@ -25,7 +25,7 @@ void Merchandise::setItemToDepartment(Item& itemToAdd, int& department)
 {
 	if (NumOfDepartments == 0) // no departments in the seller's merch, need to allocate.
 	{
-		Departments[0] = new Department(department);
+		Departments[0] = new Department(department); /*allocating unnecessary space in the department*/
 		Departments[0]->addItem(itemToAdd);
 		NumOfDepartments++;
 	}
@@ -42,10 +42,10 @@ void Merchandise::setItemToDepartment(Item& itemToAdd, int& department)
 		}
 		if (!Inserted) // if we didnt find a matching department then we gonna have to create one.
 		{
-			Departments[NumOfDepartments] = new Department(department);
+			Departments[NumOfDepartments] = new Department(department); /*need to fix. were allocating unnecessary space in the department*/
 			Departments[NumOfDepartments]->addItem(itemToAdd);
 			NumOfDepartments++;
-
+			/* need to do size++ in the Department[department]*/
 		}
 
 	}

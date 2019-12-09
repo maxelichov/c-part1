@@ -31,8 +31,8 @@ void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSi
 	int& TotalSellersPhysSize);
 void cleanBuffer();
 void addItem(Seller** Sellers, int& size);
-void AddtoSeller(Seller** Sellers, int& index);
-void addItemToSeller(Seller** Sellers, int& index, Item* item);
+void AddtoSeller(Seller* Sellers, int& index);
+void addItemToSeller(Seller* Sellers, int& index, Item* item);
 
 
 
@@ -106,11 +106,11 @@ void ExecuteChoice(int& MenuChoice, Buyer*** AllBuyers, int& TotalBuyersLogSize,
 	case 2: // Add seller case
 		addUser(AllBuyers, TotalBuyersLogSize, TotalBuyersPhysSize, MenuChoice, AllSellers, TotalSellerslogSize, TotalSellersPhysSize);
 		break;
-
+																			/* test : sending  &AllSellers */
 		case 3: // Add new item to seller
-		addItem(*AllSellers,TotalSellerslogSize);
+		addItem(*AllSellers,TotalSellerslogSize); /*TODO*/
 	}
-
+	/*  TODO : the index of the department doesnt match the eCategory. example : clothing is (3) and it appears in Department[1]*/
 }
 
 void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSize, int& Choice, Seller*** AllSellers, int& TotalSellerslogSize,
@@ -140,34 +140,34 @@ void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSi
 
 	if (Choice == 1) // need to add buyer.
 	{
-		if (*AllBuyers == nullptr) // If the array of pointers to buyers is null then make a room for one.
-			*AllBuyers = new Buyer *[TotalBuyersPhysSize];
-
-		else if (TotalBuyerslogSize == TotalBuyersPhysSize) // need to make more size into the buyers arr.
+		int i = 0;
+		Buyer* newBuyer = new Buyer(fname, lname, username, password, country, city, street, homenumber);
+		Buyer** temp = new Buyer*[TotalBuyerslogSize + 1];
+		for (i = 0; i < TotalBuyerslogSize; i++)
 		{
-			TotalBuyersPhysSize *= 2;
-			*AllBuyers = ResizeBuyersArr(*AllBuyers, TotalBuyerslogSize, TotalBuyersPhysSize);
+			temp[i] = (*AllBuyers)[i];
 		}
 
-		(*AllBuyers)[TotalBuyerslogSize] = new Buyer(fname, lname, username, password, country, city, street, homenumber); // make the new buyer
-		TotalBuyerslogSize++; // increase the buyers total number by 1.
+		temp[i] = newBuyer;
+		delete[] * AllBuyers;
+		*AllBuyers = temp;
+		TotalBuyerslogSize++;
 	}
 	else // meaning we need to add seller
 	{
-
-		if (*AllSellers == nullptr)
-			*AllSellers = new Seller *[TotalSellersPhysSize];
-
-		else if (TotalSellerslogSize == TotalSellersPhysSize)
+			int i = 0;
+			Seller* newSeller = new Seller(fname, lname, username, password, country, city, street, homenumber);
+			Seller** temp = new Seller*[TotalSellerslogSize + 1];
+		for ( i = 0; i < TotalSellerslogSize; i++)
 		{
-			TotalSellersPhysSize *= 2;
-			*AllSellers = ResizeSellersArr(*AllSellers, TotalSellerslogSize, TotalSellersPhysSize);
+			temp[i] = (*AllSellers)[i];
 		}
-
-		(*AllSellers)[TotalSellerslogSize] = new Seller(fname, lname, username, password, country, city, street, homenumber); // make the new seller
+	
+		temp[i] = newSeller;
+		delete[]  *AllSellers;
+		*AllSellers = temp;  // AllSeller is now temp //
 		TotalSellerslogSize++;
-	}
-
+	}		
 }
 
 
@@ -201,12 +201,12 @@ void addItem(Seller** Sellers, int& size)
 	cout << "Please enter your password: " << endl;
 	cin.getline(password, maxLen);
 
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < size; i++) // send to a function in the future //
 	{
-		if (strcmp((*Sellers)[i].getUsername(), username) == 0 && strcmp((*Sellers)[i].getPassword() , password) == 0) // search for the seller in the system
+		if (strcmp((Sellers)[i]->getUsername(), username) == 0 && strcmp((Sellers)[i]->getPassword() , password) == 0) // search for the seller in the system
 		{
 			cout << "login successful! Welcome " << username <<"!" << endl;
-			AddtoSeller(Sellers, i); // After we found our seller in the system, we need to add the item.
+			AddtoSeller(Sellers[i], i); // After we found our seller in the system, we need to add the item.
 			return;
 		}
 	}
@@ -215,13 +215,13 @@ void addItem(Seller** Sellers, int& size)
 
 }
 
-void AddtoSeller(Seller** Sellers, int& index) // recieves the sellers array and the index of which seller want to add the item.
-{
+void AddtoSeller(Seller* SellerToAdd, int& position) 
+{		// recieves the sellers array and the index of which specific seller is located in the array.
 	int Category, price;
 	char ItemName[ItemNameMAXlen];
-	cout << "Please Select your item category that you wanna add: " << endl;
+	cout << "Please Select your item category that you want to add: " << endl;
 	for (int i = 0; i < TotalCategories; i++)
-		cout << i << " - " << Categories[i] << endl;
+		cout << i << " - " << Categories[i] << endl; // prints all the categories to the console //
 
 	cin >> Category;
 	cout << "Enter your item name (max of 50 chars):" << endl;
@@ -231,13 +231,13 @@ void AddtoSeller(Seller** Sellers, int& index) // recieves the sellers array and
 	cin >> price;
 
 	Item* item = new Item(ItemName, price,Category); // Make a new item from the data we got about it.
-	addItemToSeller(Sellers, index, item);
+	addItemToSeller(SellerToAdd, position, item);
 }
 
-void addItemToSeller(Seller** Sellers, int& index,Item* item )
+void addItemToSeller(Seller* TheSeller, int& index,Item* item )
 {
 
-	(*Sellers)[index].AddItemToStock(*item,item->getItemCategory()); // Add the item to the seller's merch
+	TheSeller->AddItemToStock(*item,item->getItemCategory()); // Add the item to the seller's merch
 
 }
 
@@ -250,7 +250,7 @@ Seller** ResizeSellersArr(Seller** Arr, int Logsize, int PhysSize) // Increase s
 	memcpy(NewArr, Arr, Logsize * sizeof(Seller*)); // Copy the pointers from old Arr to NewArr with bigger size.
 
 	delete[]Arr;
-
+	Arr = nullptr;
 	return NewArr;
 
 	
