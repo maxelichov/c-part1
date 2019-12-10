@@ -151,6 +151,26 @@ void Buyer::b_show() const
 
 }
 
+char* Buyer::getUsername() const
+{
+	return b_Username;
+}
+
+char* Buyer::getPassword() const
+{
+	return b_Password;
+}
+
+int Buyer::getPurchasedFromSz() const
+{
+	return PurchasedFrom_sz;
+}
+
+Seller* Buyer::getSeller(int& index)
+{
+	return PurchasedFromArr[index];
+}
+
 //Buyer::Buyer(const Buyer& other)
 //{
 //	TotalItemsIndex = other.TotalItemsIndex;

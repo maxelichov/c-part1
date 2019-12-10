@@ -12,6 +12,7 @@ ItemList::ItemList()
 void ItemList::insert(Item& item) 
 {
 	  ItemNode* newItem = new ItemNode(item);
+	  size++;
 
 	if (head == nullptr) // meaning the list is empty.
 	{
@@ -26,6 +27,7 @@ void ItemList::insert(Item& item)
 		head = newItem;
 		
 	}
+	
 }
 
 ItemList::~ItemList()

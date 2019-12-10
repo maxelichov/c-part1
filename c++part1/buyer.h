@@ -4,6 +4,7 @@
 #include "Address.h"
 
 class Item;
+class Seller;
 
 class Buyer
 { 
@@ -17,6 +18,8 @@ private:
 	Address b_address;
 	Item** ShoppingCart = nullptr; // deafult when making a buyer will be null;
 	Item** FinalCart = nullptr;
+	Seller** PurchasedFromArr; // will point to all the sellers he purchased from.
+	int PurchasedFrom_sz = 0; // size of the purchased from arr
 
 public:
 
@@ -25,7 +28,11 @@ public:
 	bool setName(char* firstName, char* lastName);
 	bool setUsername(char* username);
 	bool setPassword(char* password);
+	char* getUsername() const;
+	char* getPassword() const;
+	int getPurchasedFromSz () const;
 	void b_show() const;
+	Seller* getSeller(int& index);
 
 
 	~Buyer();

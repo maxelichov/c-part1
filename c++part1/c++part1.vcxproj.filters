@@ -45,13 +45,13 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fidback.h">
+    <ClInclude Include="feedback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fidbacklist.h">
+    <ClInclude Include="FeedbackList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fidbacknode.h">
+    <ClInclude Include="feedbacknode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -86,13 +86,13 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fidback.cpp">
+    <ClCompile Include="feedback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fidbacklist.cpp">
+    <ClCompile Include="feedbacklist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fidbacknode.cpp">
+    <ClCompile Include="feedbacknode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

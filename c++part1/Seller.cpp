@@ -9,8 +9,8 @@
 using namespace std;
 
 
-Seller::Seller(char* Fname, char* Lname, char* bUsername, char* bPassword, char* Country, char* City, char* Street, int& HomeNumber) : s_address(Country, City, Street, HomeNumber), s_Merch()
-{								// seller ctor //																						// send to address ctor //								// send to merchandise ctor //
+Seller::Seller(char* Fname, char* Lname, char* bUsername, char* bPassword, char* Country, char* City, char* Street, int& HomeNumber) : s_address(Country, City, Street, HomeNumber), s_Merch(), allFeedBacks()
+{								// seller ctor //																						// send to address ctor //			// send to merchandise ctor // //send to feedback ctor//
 	bool indicator;
 	indicator = setName(Fname, Lname);
 	if (indicator == 0)
@@ -156,6 +156,11 @@ char* Seller::getPassword() const
 void Seller::AddItemToStock(Item& NewItem,int Category)
 {
 	s_Merch.setItemToDepartment(NewItem, Category);
+}
+
+void Seller::addFeedback(char* feedback,char* BuyerName)
+{
+	allFeedBacks.AddFeedbackToSeller(feedback,BuyerName);
 }
 
 /*int checkCategory(Seller& seller)

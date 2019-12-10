@@ -2,7 +2,6 @@
 #define ItemNameMAXlen 50
 
 
-
 class Item
 {
 public:

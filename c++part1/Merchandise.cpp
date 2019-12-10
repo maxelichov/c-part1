@@ -49,10 +49,12 @@ void Merchandise::setItemToDepartment(Item& itemToAdd, int& department)
 		}
 
 	}
+	TotalNumOfItems++;
 }
 
 Merchandise::~Merchandise()
 {
+
 	delete[] Departments;
 
 

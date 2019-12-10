@@ -2,7 +2,7 @@
 #pragma once
 #include "Address.h"
 #include "Merchandise.h"
-#include "Fidback.h"
+#include "feedback.h"
 
 class Seller
 {
@@ -13,7 +13,7 @@ private:
 	char* s_Username;
 	Address s_address;
 	Merchandise s_Merch;
-	Fidback allFeedBacks;  
+	Feedback allFeedBacks;  
 
 
 public:
@@ -26,10 +26,11 @@ public:
 	char* getUsername() const;
 	char* getPassword() const;
 	void s_show()   const;
-	bool CheckSellerItemStock(Seller& seller);
 	void AddItemToStock(Item& NewItem,int Category); 
+	void addFeedback(char* feedback,char* BuyerName);
 	
-	/*friend GiveFidbackToSeller(Seller* TheSeller, char* fidback);*/ //Todo
+	/*bool CheckSellerItemStock(Seller& seller);*/
+	/*friend GiveFidbackToSeller(Seller* TheSeller, char* feedback);*/ //Todo
 
 
 };
