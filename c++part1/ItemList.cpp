@@ -1,10 +1,12 @@
-
-#include "pch.h"
 #pragma once
+#include "pch.h"
 #include "ItemList.h"
 #include "ItemNode.h"
 #include "Item.h"
 #include <string.h>
+#include <iostream>
+using namespace std;
+
 
 
 
@@ -85,7 +87,7 @@ Item* ItemList::getItem(const char* itemName)  // return a pointer or a referenc
 
 }
 
-bool ItemList :: removeSingle(const char* ItemName) // Todo
+bool ItemList :: removeSingle(const char* ItemName) 
 {
 
 	ItemNode* temp = this->head;
@@ -98,7 +100,28 @@ bool ItemList :: removeSingle(const char* ItemName) // Todo
 			temp->next = temp->next->next;
 			delete save;
 			return true;
+
 		}
+		temp = temp->next;
+	}
+	
+	cout << "there is no such item , please try again" << endl;
+	return false;
+}
+
+bool ItemList::removeSingle(Item& item)
+{
+	ItemNode* temp = this->head, *save;
+	while (temp)
+	{
+		if (temp->item == &item)
+		{
+			save = temp->next;
+			temp->next = temp->next->next;
+			delete save;
+			return true;
+		}
+		temp = temp->next;
 	}
 	cout << "there is no such item , please try again" << endl;
 	return false;

@@ -1,3 +1,4 @@
+#pragma once
 #include "pch.h"
 #include "Merchandise.h"
 #include "Item.h"

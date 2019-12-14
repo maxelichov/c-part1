@@ -1,3 +1,4 @@
+#pragma once
 #include "pch.h"
 #include "Seller.h"
 #include "Address.h"

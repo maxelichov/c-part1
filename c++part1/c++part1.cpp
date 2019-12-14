@@ -5,8 +5,8 @@
 #include "Address.h"
 #include "Buyer.h"
 #include "Seller.h"
-//#include "Feedback.h"
-//#include "Shoppingcart.h"
+#include "Feedback.h"
+#include "shoppingcart.h"
 #include <stdio.h>
 #include "Merchandise.h"
 #include "ItemNode.h"
