@@ -5,6 +5,8 @@
 #include "ItemNode.h"
 #include "Item.h"
 #include <string.h>
+#include<iostream>
+using namespace std;
 
 
 
@@ -96,10 +98,18 @@ bool ItemList :: removeSingle(const char* ItemName) // Todo
 		{
 			save = temp->next;
 			temp->next = temp->next->next;
+			delete save->item;
 			delete save;
 			return true;
 		}
 	}
 	cout << "there is no such item , please try again" << endl;
+	return false;
+}
+
+bool ItemList::removeSingle(Item& item)
+{
+
+
 	return false;
 }
