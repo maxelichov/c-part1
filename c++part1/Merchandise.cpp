@@ -2,7 +2,11 @@
 #include "Merchandise.h"
 #include "Item.h"
 #include "Department.h"
+#include "ItemList.h"
+#include <string.h>
 #pragma once
+
+const char* Categories1[] = { "Children" , "Clothing" , "Electricity" , "Office" };
 
 Merchandise::Merchandise()  // C'TOR
 {
@@ -54,10 +58,45 @@ void Merchandise::setItemToDepartment(Item& itemToAdd, int& department)
 
 Merchandise::~Merchandise()
 {
-
+	for (int i = 0; i < this->getNumOfDepartments(); i++)
+	{
+		Departments[i]->getStock()->removeAllItems();
+		delete Departments[i];
+		
+	}
 	delete[] Departments;
-
-
 }
 
+bool Merchandise::haveDepartment(const char* category)
+{
+	for (int i = 0; i < getNumOfDepartments(); i++)
+	{
+		if (strcmp(Categories1[this->Departments[i]->getDepartment()] , category)==0)
+			return true;
+    }
+	return false;
+}
 
+void Merchandise::ShowDepartment(const char* department)
+{
+	for (int i = 0; i < this->getNumOfDepartments(); i++)
+	{
+		if (Categories1[Departments[i]->getDepartment()] == department)
+		{
+			this->Departments[i]->getStock()->showList();
+		}
+	}
+}
+
+Item* Merchandise:: getItemOfCategory(const char* Category,const char* ItemName)
+{
+	Item item;
+	for (int i = 0; i < NumOfDepartments; i++)
+	{
+		if (Departments[i]->getDepartment(Category) == Category)
+		{
+			 return Departments[i]->getStock()->getItem(ItemName);
+		}
+    }
+	return nullptr;
+}

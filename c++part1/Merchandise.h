@@ -4,6 +4,7 @@
 class Department;
 class Item;
 
+
 class Merchandise
 {
 private:
@@ -15,6 +16,7 @@ private:
 
 public:
 
+
 	Merchandise();
 	~Merchandise(); // dtor //
 	void setItemToDepartment(Item& itemToAdd , int& department);
@@ -24,6 +26,9 @@ public:
 	void setTotalNumOfItems(const int& totalNumOfItems);
 	int getNumOfDepartments() const;
 	int getTotalNumOfItems() const;
+	bool haveDepartment(const char* category);
+	void ShowDepartment(const char* department);
+	Item* getItemOfCategory(const char* Category,const char* ItemName);
 
 
 };

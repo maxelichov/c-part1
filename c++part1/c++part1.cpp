@@ -11,12 +11,14 @@
 #include "Merchandise.h"
 #include "ItemNode.h"
 
+
 using namespace std;
 #define maxFeedbackLen 100
 #define maxLen 31
 using namespace std;
 #define EXIT 11
 const char* Categories[] = { "Children" , "Clothing" , "Electricity" , "Office" };
+enum eCategory { Children, Clothing, Electricity, Office };
 #define TotalCategories 4
 
 //FUNCTION'S DECLARATIONS :
@@ -34,11 +36,15 @@ void AddtoSeller(Seller* Sellers, int& index);
 void addItemToSeller(Seller* Sellers, int& index, Item* item);
 void addFeedback(Buyer** AllBuyers, Seller** AllSellers, int& TotalSellerslogSize, int& TotalBuyerslogSize);
 bool IsSellerInSystem(Seller** Sellers, const int& TotalSellerslogSize, char* username, char* password);
-bool IsBuyerInSystem(Buyer** Buyers, const int& TotalBuyersLogSize, char* username, char* password);
+bool IsBuyerInSystem(Buyer** Buyers, const int& TotalBuyersLogSize, char* username, char* password, int& index);
 bool IsSellerInSystemV2(Seller** Sellers, const int& TotalSellerslogSize, char* username,int& index);
 bool checkIfPurchasedFrom(Buyer** AllBuyers, Seller** AllSellers, int& TotalBuyerslogSize, int& TotalSellerslogSize, char* SellerName,
 	char* username);
 void GiveFeedbackToSeller(Seller* TheSeller, char* feedback,char* username);
+void FindAndAddItem(const int& CategoryChoice, Buyer* TheBuyer, Seller** AllSellers, int Sellers_sz);
+void addItemtobuyer(Buyer** AllBuyers, Seller** AllSellers, const int& TotalBuyerslogSize, const int& TotalSellerslogSize);
+bool ValidateCategory(int choice);
+void AddItemtobuyerFINAL(Buyer* TheBuyer, Seller** AllSellers, int& Sellers_sz, char* TheSeller, char* TheItem, const char* Category);
 
 
 int main()
@@ -96,6 +102,10 @@ void ExecuteChoice(int& MenuChoice, Buyer*** AllBuyers, int& TotalBuyersLogSize,
 		case 4: // add feedback to seller
 		addFeedback(*AllBuyers, *AllSellers , TotalSellerslogSize,TotalBuyersLogSize); // TODO
 		break;
+		case 5:
+		addItemtobuyer(*AllBuyers, *AllSellers, TotalBuyersLogSize, TotalSellerslogSize);
+		break;
+
 
 		default:
 			break;
@@ -216,13 +226,14 @@ void addItemToSeller(Seller* TheSeller, int& index, Item* item)
 void addFeedback(Buyer** AllBuyers, Seller** AllSellers, int& TotalSellerslogSize, int& TotalBuyerslogSize)
 {	/*need to login as buyer before adding a feedback*/
 	char username[maxLen], password[maxLen];
+	int indexOfBuyer;
 	cout << " Please log in to the system in order to add a feedback to a seller" << endl;
 	cout << "Please enter your username: " << endl;
 	cin.getline(username, maxLen);
 	cout << "Please enter your password: " << endl;
 	cin.getline(password, maxLen);
 
-	bool Valid = IsBuyerInSystem(AllBuyers, TotalBuyerslogSize, username, password);
+	bool Valid = IsBuyerInSystem(AllBuyers, TotalBuyerslogSize, username, password,indexOfBuyer);
 	if (!Valid)
 	{
 		cout << "Error: Buyer " << username << " Is not in the system with the password " << password << endl;
@@ -233,12 +244,12 @@ void addFeedback(Buyer** AllBuyers, Seller** AllSellers, int& TotalSellerslogSiz
 
 	char feedback[maxFeedbackLen];
 	char SellerName[maxLen];
-	int index;
+	int indexOfSeller;
 
 	cout << "please enter the username of the seller you wish to give a feedback to " << endl;
 	cin.getline(SellerName, maxLen);
 
-	bool found = IsSellerInSystemV2(AllSellers, TotalSellerslogSize, SellerName,index);
+	bool found = IsSellerInSystemV2(AllSellers, TotalSellerslogSize, SellerName, indexOfSeller);
 	if (!found)
 	{
 		cout << "the name you enterd does not exist in the system. please try again." << endl;
@@ -257,15 +268,120 @@ void addFeedback(Buyer** AllBuyers, Seller** AllSellers, int& TotalSellerslogSiz
 	cleanBuffer();
 	cin.getline(feedback, maxFeedbackLen);
 	// insert the feedback to the seller //
-	GiveFeedbackToSeller(AllSellers[index], feedback,username);
+	GiveFeedbackToSeller(AllSellers[indexOfSeller], feedback,username);
 }
 
-bool IsBuyerInSystem(Buyer** Buyers, const int& TotalBuyersLogSize, char* username, char* password)
+void addItemtobuyer(Buyer** AllBuyers, Seller** AllSellers, const int& TotalBuyerslogSize, const int& TotalSellerslogSize)
+{
+	int CategoryChoice, BuyerIndex;
+	bool res;
+	/*need to login as buyer before adding a feedback*/
+	char username[maxLen], password[maxLen];
+	cout << " Please log in to the system in order to add an item to your cart" << endl;
+	cout << "Please enter your username: " << endl;
+	cin.getline(username, maxLen);
+	cout << "Please enter your password: " << endl;
+	cin.getline(password, maxLen);
+
+	bool Valid = IsBuyerInSystem(AllBuyers, TotalBuyerslogSize, username, password,BuyerIndex);
+	if (!Valid)
+	{
+		cout << "Error: Buyer " << username << " Is not in the system with the password " << password << endl;
+		return;
+	}
+
+	cout << "Welcome " << username << endl << "Pick a category: " << endl;
+	for (int i = 0; i < TotalCategories; i++)
+		cout << i << " - " << Categories[i] << endl; // prints all the categories to the console //
+
+	cin >> CategoryChoice;
+	res = ValidateCategory(CategoryChoice);
+	while (!res)
+	{
+		cout << "Invalid category choice" << endl;
+		cin >> CategoryChoice;
+		res = ValidateCategory(CategoryChoice);
+	}
+
+	FindAndAddItem(CategoryChoice, AllBuyers[BuyerIndex], AllSellers, TotalSellerslogSize);
+
+}
+
+void FindAndAddItem(const int& CategoryChoice, Buyer* TheBuyer, Seller** AllSellers, int Sellers_sz)
+{
+	char Sellername[maxLen];
+	char ItemName[ItemNameMAXlen];
+	int val;
+	for (int i = 0; i < Sellers_sz; i++) // run on all sellers
+	{ 
+	    if (AllSellers[i]->HaveCategory(Categories[CategoryChoice])) // If the seller have the requested category
+		{
+			cout << "Items of seller: " << AllSellers[i]->getUsername() << endl;
+			AllSellers[i]->showCategoryItems(Categories[CategoryChoice]); // show all the items that the seller have in the category
+		}
+	}
+	cout << "To exit press 1, to continue purchase press 2";
+	cin >> val;
+	while ((val != 1) || (val != 2))
+	{
+		cout << " Please enter ""1"" to exit or ""2"" to continue";
+		cin.clear();
+		cin.ignore(123, '\n');
+		cin >> val;
+	}
+	if (val == 1)
+		return;
+	else
+	{
+		cout << endl << "For adding an item to your cart please enter seller's name and item name: \n Seller name:";
+		cin.getline(Sellername, maxLen);
+		cout << "Item name: ";
+		cin.getline(ItemName, ItemNameMAXlen);
+	}
+
+	AddItemtobuyerFINAL(TheBuyer, AllSellers, Sellers_sz, Sellername, ItemName, Categories[CategoryChoice]);
+
+}
+
+void AddItemtobuyerFINAL(Buyer* TheBuyer, Seller** AllSellers, int& Sellers_sz, char* TheSeller, char* TheItem, const char* Category)
+{
+	Item* item = nullptr;
+	for (int i = 0; i < Sellers_sz; i++) // run on all sellers
+	{
+		if (strcmp(AllSellers[i]->getUsername(), TheSeller) == 0) // If the seller matches the name
+		{
+			if (AllSellers[i]->HaveCategory(Category)) // If the seller really have the category that the buyer looked for
+			{
+				item = AllSellers[i]->getItem(Category, TheItem);
+
+			}
+		} 
+	}
+	if (item != nullptr) // meaning we found the item of choice.
+	{
+		InsertToBuyersCart() // need to insert the item we found to the buyer
+	}
+
+
+}
+
+bool ValidateCategory(int choice)
+{
+	if (choice >= 0 && choice <= 3)
+		return true;
+
+	return false;
+}
+
+bool IsBuyerInSystem(Buyer** Buyers, const int& TotalBuyersLogSize, char* username, char* password,int& index)
 {
 	for (int i = 0; i < TotalBuyersLogSize; i++) // send to a function in the future //
 	{
 		if (strcmp((Buyers)[i]->getUsername(), username) == 0 && strcmp((Buyers)[i]->getPassword(), password) == 0) // search for the buyer in the system
+		{
+			index = i;
 			return true;
+		}
 	}
 	return false;
 }
