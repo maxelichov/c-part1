@@ -45,6 +45,8 @@ void FindAndAddItem(const int& CategoryChoice, Buyer* TheBuyer, Seller** AllSell
 void addItemtobuyer(Buyer** AllBuyers, Seller** AllSellers, const int& TotalBuyerslogSize, const int& TotalSellerslogSize);
 bool ValidateCategory(int choice);
 void AddItemtobuyerFINAL(Buyer* TheBuyer, Seller** AllSellers, int& Sellers_sz, char* TheSeller, char* TheItem, const char* Category);
+void InsertToBuyersCart(Buyer* TheBuyer, Seller* TheSeller, Item* item);
+
 
 
 int main()
@@ -273,6 +275,12 @@ void addFeedback(Buyer** AllBuyers, Seller** AllSellers, int& TotalSellerslogSiz
 
 void addItemtobuyer(Buyer** AllBuyers, Seller** AllSellers, const int& TotalBuyerslogSize, const int& TotalSellerslogSize)
 {
+	if (TotalSellerslogSize == 0) // no sellers in the system, can't add any item
+	{
+		cout << "No available sellers in the system" << endl;
+		return;
+	}
+
 	int CategoryChoice, BuyerIndex;
 	bool res;
 	/*need to login as buyer before adding a feedback*/
@@ -282,11 +290,11 @@ void addItemtobuyer(Buyer** AllBuyers, Seller** AllSellers, const int& TotalBuye
 	cin.getline(username, maxLen);
 	cout << "Please enter your password: " << endl;
 	cin.getline(password, maxLen);
-
+	
 	bool Valid = IsBuyerInSystem(AllBuyers, TotalBuyerslogSize, username, password,BuyerIndex);
 	if (!Valid)
 	{
-		cout << "Error: Buyer " << username << " Is not in the system with the password " << password << endl;
+		cout << "Error: Buyer " << username << " is not in the system with the password " << password << endl;
 		return;
 	}
 
@@ -320,11 +328,11 @@ void FindAndAddItem(const int& CategoryChoice, Buyer* TheBuyer, Seller** AllSell
 			AllSellers[i]->showCategoryItems(Categories[CategoryChoice]); // show all the items that the seller have in the category
 		}
 	}
-	cout << "To exit press 1, to continue purchase press 2";
+	cout << "To exit press 1, to continue purchase press 2 and enter" << endl;
 	cin >> val;
-	while ((val != 1) || (val != 2))
+	while (!(val == 1) || (val == 2))
 	{
-		cout << " Please enter ""1"" to exit or ""2"" to continue";
+		cout << " Please enter ""1"" to exit or ""2"" to continue" << endl;
 		cin.clear();
 		cin.ignore(123, '\n');
 		cin >> val;
@@ -345,8 +353,9 @@ void FindAndAddItem(const int& CategoryChoice, Buyer* TheBuyer, Seller** AllSell
 
 void AddItemtobuyerFINAL(Buyer* TheBuyer, Seller** AllSellers, int& Sellers_sz, char* TheSeller, char* TheItem, const char* Category)
 {
+	int i;
 	Item* item = nullptr;
-	for (int i = 0; i < Sellers_sz; i++) // run on all sellers
+	for (i = 0; i < Sellers_sz; i++) // run on all sellers
 	{
 		if (strcmp(AllSellers[i]->getUsername(), TheSeller) == 0) // If the seller matches the name
 		{
@@ -359,10 +368,16 @@ void AddItemtobuyerFINAL(Buyer* TheBuyer, Seller** AllSellers, int& Sellers_sz, 
 	}
 	if (item != nullptr) // meaning we found the item of choice.
 	{
-		InsertToBuyersCart() // need to insert the item we found to the buyer
+		InsertToBuyersCart(TheBuyer, AllSellers[i], item); // need to insert the item we found to the buyer
 	}
 
 
+}
+
+void InsertToBuyersCart(Buyer* TheBuyer, Seller* TheSeller, Item* item)
+{
+	TheBuyer->InsertItem(item);
+	TheBuyer->UpdatePurchasedFromArr(TheSeller);
 }
 
 bool ValidateCategory(int choice)
