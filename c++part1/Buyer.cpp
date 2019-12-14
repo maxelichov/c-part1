@@ -8,7 +8,7 @@
 using namespace std;
 
 
-Buyer::Buyer(char* Fname, char* Lname, char* bUsername, char* bPassword, char* Country, char* City, char* Street, int& HomeNumber) : b_address(Country, City, Street, HomeNumber)
+Buyer::Buyer(char* Fname, char* Lname, char* bUsername, char* bPassword, char* Country, char* City, char* Street, int& HomeNumber) : b_address(Country, City, Street, HomeNumber), b_Cart()
 {
 	bool indicator;
 	indicator = setName(Fname, Lname);

@@ -23,7 +23,7 @@
     <ProjectGuid>{00C980AB-396F-4D3B-BBB8-F23DA95802EF}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>cpart1</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -42,8 +42,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -164,6 +164,7 @@
     <ClInclude Include="Merchandise.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Seller.h" />
+    <ClInclude Include="shoppingcart.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Buyer.cpp">
@@ -185,6 +186,7 @@
     <ClCompile Include="Merchandise.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Seller.cpp" />
+    <ClCompile Include="shoppingcart.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

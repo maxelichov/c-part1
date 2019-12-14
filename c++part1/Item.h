@@ -12,7 +12,10 @@ private:
 	int ItemPrice;
 	int SerialNumber;
 	eCategory itemCategory;
+
 public:
+	
+	bool isInShopingCart = false;
 	Item() = default;
 	Item(char* name, int price,int category); // ctor //
 	~Item(); // dtor//
@@ -20,7 +23,8 @@ public:
 	bool setItemPrice(int price);
 	/*bool setItemSerialNumber(int* serialNumber);*/ //serial number will be automatically by the system?
 	bool setCategory(int itemCategory);
-
+	/*friend class ItemNode;
+	friend class ItemList;*/  // should we give friendship to does classes?.
 	char* getItemName();
 	int		getItemPrice();
 	int getItemSerialNumber();

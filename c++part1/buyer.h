@@ -2,6 +2,7 @@
 #pragma once
 #define maxLen 31
 #include "Address.h"
+#include "ShoppingCart.h"
 
 class Item;
 class Seller;
@@ -16,8 +17,7 @@ private:
 	char* b_Username;
 	char* b_Password;
 	Address b_address;
-	Item** ShoppingCart = nullptr; // deafult when making a buyer will be null;
-	Item** FinalCart = nullptr;
+	ShoppingCart b_Cart; // deafult when making a buyer will be null;
 	Seller** PurchasedFromArr; // will point to all the sellers he purchased from.
 	int PurchasedFrom_sz = 0; // size of the purchased from arr
 

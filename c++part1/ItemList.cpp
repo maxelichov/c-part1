@@ -1,6 +1,12 @@
+
 #include "pch.h"
+#pragma once
 #include "ItemList.h"
 #include "ItemNode.h"
+#include "Item.h"
+#include <string.h>
+
+
 
 
 ItemList::ItemList() 
@@ -40,4 +46,60 @@ ItemList::~ItemList()
 		head = node;
 	}
 	
+}
+
+bool ItemList::isEmpty()
+{
+	if (!head)
+		return true;
+		return false;
+}
+
+int ItemList::getSize()
+{
+	int size = 0;
+	ItemNode* counter = this->head;
+	while (counter)
+	{
+		counter = counter->next;
+		size++;
+	}
+	return size;
+}
+
+Item* ItemList::getItem(const char* itemName)  // return a pointer or a reference to the item?
+{
+	ItemNode* temp = this->head; // pointer or reference?
+		
+
+	while (temp)
+	{
+		if ((strcmp(temp->item->getItemName(), itemName)) == 0)
+		{
+			return  temp->item;
+			break;
+		}
+	
+		temp = temp->next;
+	}
+
+}
+
+bool ItemList :: removeSingle(const char* ItemName) // Todo
+{
+
+	ItemNode* temp = this->head;
+	ItemNode* save, *NodeToRemove;
+	while (temp)
+	{
+		if (strcmp(temp->next->item->getItemName(), ItemName) == 0)
+		{
+			save = temp->next;
+			temp->next = temp->next->next;
+			delete save;
+			return true;
+		}
+	}
+	cout << "there is no such item , please try again" << endl;
+	return false;
 }

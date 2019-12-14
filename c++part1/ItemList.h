@@ -12,13 +12,14 @@ public:
 
 	ItemList();
 	void insert(Item& item);
-	void removeSingle(Item& item);
-	void removeSingle(char* serialNumber);
-	void removeAllItems(char* itemName);
-	Item& getItem(Item& item);
-	Item& getItem(char* itemName);
+	bool removeSingle(Item& item);//TODO
+	bool removeSingle(const char* ItemName); //Todo
+	/*bool removeSingle( const char* serialNumber);//TODO*/
+	bool removeAllItems(const char* itemName); //TODO
+	Item& getItem(Item& item); //TODO
+	Item* getItem(const char* itemName); //return a pointer or reference?
 	int getSize();
-	bool isEmpty();
+	bool isEmpty(); 
 
 	~ItemList(); // for(all nodes) { delete node}
 };

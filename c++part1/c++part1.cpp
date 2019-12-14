@@ -318,10 +318,3 @@ void cleanBuffer()
 		ch = getchar();
 	} while (ch != EOF && ch != '\n');
 }
-
-
-
-
-
-
-
