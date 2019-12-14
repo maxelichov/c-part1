@@ -2,7 +2,7 @@
 #include "Merchandise.h"
 #include "Item.h"
 #include "Department.h"
-
+#pragma once
 
 Merchandise::Merchandise()  // C'TOR
 {

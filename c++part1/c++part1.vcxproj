@@ -181,7 +181,9 @@
     <ClCompile Include="feedbacklist.cpp" />
     <ClCompile Include="feedbacknode.cpp" />
     <ClCompile Include="Item.cpp" />
-    <ClCompile Include="ItemList.cpp" />
+    <ClCompile Include="ItemList.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="ItemNode.cpp" />
     <ClCompile Include="Merchandise.cpp" />
     <ClCompile Include="pch.cpp" />
