@@ -117,3 +117,8 @@ int  Item::getItemCategory()
 {		
 	return  (int)itemCategory;
 }
+
+void Item::showTheItem()
+{
+	cout << "Item Name: " << ItemName <<  ", Price: " << ItemPrice << endl;
+}

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "shoppingcart.h"
+#pragma once
 
 bool ShoppingCart::AddItemToCart(Item& ChosenItem)
 {

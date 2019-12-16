@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Department.h"
 #include "ItemList.h"
+#include <string.h>
 
 
 
@@ -31,4 +32,14 @@ Department::~Department()
 int Department:: getDepartment()
 {
 	return (int)department;
+}
+
+ItemList* Department::getStock()
+{
+	return stock;
+}
+
+const char* Department:: getDepartment(const char* category)
+{
+	return Categories[getDepartment()];
 }

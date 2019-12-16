@@ -7,6 +7,7 @@ class Department
 {
 public:
 	enum eCategory { Children, Clothing, Electricity, Office };
+	const char* Categories [4] = { "Children" , "Clothing" , "Electricity" , "Office" };
 private:
 	eCategory department;
 	ItemList* stock;
@@ -17,6 +18,8 @@ public:
 
 	void addItem(Item& item);
 	int getDepartment();
+	const char* getDepartment(const char* category);
+	ItemList* getStock();
 
 	~Department();
 };

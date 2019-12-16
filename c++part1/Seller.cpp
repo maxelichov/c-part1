@@ -164,7 +164,23 @@ void Seller::addFeedback(char* feedback,char* BuyerName)
 	allFeedBacks.AddFeedbackToSeller(feedback,BuyerName);
 }
 
-/*int checkCategory(Seller& seller)
-{
 
-}*/
+int Seller::getCategoriesSize()
+{
+	return(s_Merch.getNumOfDepartments());
+}
+
+bool Seller:: HaveCategory(const char* Category)
+{
+  return 	this->s_Merch.haveDepartment(Category);
+}
+
+void Seller::showCategoryItems(const char* Category)
+{
+	this->s_Merch.ShowDepartment(Category);
+}
+
+Item* Seller::getItem(const char* Category,const char* ItemName)
+{
+	return this->s_Merch.getItemOfCategory(Category,ItemName);
+}

@@ -33,6 +33,9 @@ public:
 	int getPurchasedFromSz () const;
 	void b_show() const;
 	Seller* getSeller(int& index);
+	void InsertItem(Item* item);
+	void UpdatePurchasedFromArr(Seller* TheSeller);
+
 
 
 	~Buyer();

@@ -171,6 +171,17 @@ Seller* Buyer::getSeller(int& index)
 	return PurchasedFromArr[index];
 }
 
+void Buyer:: InsertItem(Item* item)
+{
+	b_Cart.AddItemToCart(*item);
+}
+
+void Buyer::UpdatePurchasedFromArr(Seller* TheSeller)
+{
+	PurchasedFromArr[PurchasedFrom_sz] = TheSeller;
+	PurchasedFrom_sz++;
+}
+
 //Buyer::Buyer(const Buyer& other)
 //{
 //	TotalItemsIndex = other.TotalItemsIndex;

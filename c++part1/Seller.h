@@ -3,6 +3,7 @@
 #include "Address.h"
 #include "Merchandise.h"
 #include "feedback.h"
+class ItemNode;
 
 class Seller
 {
@@ -28,6 +29,11 @@ public:
 	void s_show()   const;
 	void AddItemToStock(Item& NewItem,int Category); 
 	void addFeedback(char* feedback,char* BuyerName);
+	int getCategoriesSize();
+	bool HaveCategory(const char* Category);
+	void showCategoryItems(const char* Category);
+	Item* getItem(const char* Category,const char* ItemName);
+
 	
 	/*bool CheckSellerItemStock(Seller& seller);*/
 	/*friend GiveFidbackToSeller(Seller* TheSeller, char* feedback);*/ //Todo

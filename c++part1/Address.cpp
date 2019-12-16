@@ -11,6 +11,7 @@ using namespace std;
 
 #define MAX_HOMENUM 300
 
+
 Address::Address(char* Country, char* City, char* Street, int& HomeNumber) // C'TOR
 {
 	bool indicator;
@@ -52,10 +53,12 @@ Address::Address(char* Country, char* City, char* Street, int& HomeNumber) // C'
 	{
 		do {
 			cout << "Home number needs to be between 1 to 300 " << endl << "Enter home number :" << endl;
+			cin.clear();
+			cin.ignore(123, '\n');
 			cin >> HomeNumber;
+
 			indicator = setHomeNumber(HomeNumber);
 		} while (!indicator);
-
 	}
 
 }
@@ -115,12 +118,12 @@ bool Address::setLocation(char* location, int flag) // if flag == 0 set country 
 bool Address::setHomeNumber(int homenumber)
 {
 	if (homenumber <= 0 || homenumber > MAX_HOMENUM)
-		return 0;
+		return false;
 
 	else
 		HomeNumber = homenumber;
 
-	return 1;
+	return true;
 }
 
 void Address::show() const

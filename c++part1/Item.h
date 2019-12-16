@@ -29,4 +29,5 @@ public:
 	int		getItemPrice();
 	int getItemSerialNumber();
 	int	getItemCategory();
+	void showTheItem();
 };
