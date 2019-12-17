@@ -11,7 +11,7 @@ private:
 public:
 		
 	FeedbackNode();
-	FeedbackNode(char* Feedback, char* BuyerName);
+	FeedbackNode( const char* Feedback, char* BuyerName);
 
 
 	friend class FeedbackList;

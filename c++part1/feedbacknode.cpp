@@ -14,7 +14,7 @@ FeedbackNode::FeedbackNode()
 	next = nullptr;
 }
 
-FeedbackNode::FeedbackNode(char* Feedback, char* BuyerName)
+FeedbackNode::FeedbackNode(const char* Feedback, char* BuyerName)
 {
 	BuyerThatGaveFeedback = new char[strlen(BuyerName) + 1];
 	strcpy(BuyerThatGaveFeedback, BuyerName);

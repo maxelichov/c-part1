@@ -126,3 +126,19 @@ bool ItemList::removeSingle(Item& item)
 	cout << "there is no such item , please try again" << endl;
 	return false;
 }
+
+void ItemList::removeAllItems()
+{
+	this->~ItemList();
+}
+
+void ItemList::showList()
+{
+	ItemNode* temp = head;
+	while (temp)
+	{
+		temp->showNode();
+		temp = temp->next;
+
+	}
+}

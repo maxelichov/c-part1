@@ -32,9 +32,11 @@ public:
 	char* getPassword() const;
 	int getPurchasedFromSz () const;
 	void b_show() const;
-	Seller* getSeller(int& index);
+	Seller* getSeller(const char* Sellername);
 	void InsertItem(Item* item);
 	void UpdatePurchasedFromArr(Seller* TheSeller);
+	void showPurchasedFrom();
+
 
 
 

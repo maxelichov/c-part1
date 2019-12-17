@@ -37,10 +37,10 @@ void addItemToSeller(Seller* Sellers, int& index, Item* item);
 void addFeedback(Buyer** AllBuyers, Seller** AllSellers, int& TotalSellerslogSize, int& TotalBuyerslogSize);
 bool IsSellerInSystem(Seller** Sellers, const int& TotalSellerslogSize, char* username, char* password);
 bool IsBuyerInSystem(Buyer** Buyers, const int& TotalBuyersLogSize, char* username, char* password, int& index);
-bool IsSellerInSystemV2(Seller** Sellers, const int& TotalSellerslogSize, char* username,int& index);
-bool checkIfPurchasedFrom(Buyer** AllBuyers, Seller** AllSellers, int& TotalBuyerslogSize, int& TotalSellerslogSize, char* SellerName,
-	char* username);
-void GiveFeedbackToSeller(Seller* TheSeller, char* feedback,char* username);
+bool IfPurchasedFrom(char* TheSeller, Buyer* TheBuyer);
+//bool checkIfPurchasedFrom(Buyer** AllBuyers, Seller** AllSellers, int& TotalBuyerslogSize, int& TotalSellerslogSize, char* SellerName,
+//	char* username);
+void GiveFeedbackToSeller(char* feedback, Buyer* TheBuyer, char* SellerName);
 void FindAndAddItem(const int& CategoryChoice, Buyer* TheBuyer, Seller** AllSellers, int Sellers_sz);
 void addItemtobuyer(Buyer** AllBuyers, Seller** AllSellers, const int& TotalBuyerslogSize, const int& TotalSellerslogSize);
 bool ValidateCategory(int choice);
@@ -98,21 +98,27 @@ void ExecuteChoice(int& MenuChoice, Buyer*** AllBuyers, int& TotalBuyersLogSize,
 	case 2: // Add seller case
 		addUser(AllBuyers, TotalBuyersLogSize, TotalBuyersPhysSize, MenuChoice, AllSellers, TotalSellerslogSize, TotalSellersPhysSize);
 		break;											
-		case 3: // Add new item to seller
+	case 3: // Add new item to seller
 		addItem(*AllSellers,TotalSellerslogSize);
 		break;
-		case 4: // add feedback to seller
+	case 4: // add feedback to seller
 		addFeedback(*AllBuyers, *AllSellers , TotalSellerslogSize,TotalBuyersLogSize); // TODO
 		break;
-		case 5:
+	case 5:
 		addItemtobuyer(*AllBuyers, *AllSellers, TotalBuyersLogSize, TotalSellerslogSize);
 		break;
-
+	case 6:
+		/*MakeAPurchase()*/
 
 		default:
 			break;
 	}
 }
+
+/*void MakePurchase()
+{
+
+}*/
 
 void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSize, int& Choice, Seller*** AllSellers, int& TotalSellerslogSize,
 	int& TotalSellersPhysSize) // function for both to add buyer and seller instead of 2 funcs.
@@ -225,13 +231,20 @@ void addItemToSeller(Seller* TheSeller, int& index, Item* item)
 	TheSeller->AddItemToStock(*item, item->getItemCategory()); // Add the item to the seller's merch
 }
 
+void PurchasedFrom(Buyer* TheBuyer)
+{
+	cout << "sellers you purchased from are : " << endl;
+	
+
+}
+
 void addFeedback(Buyer** AllBuyers, Seller** AllSellers, int& TotalSellerslogSize, int& TotalBuyerslogSize)
 {	/*need to login as buyer before adding a feedback*/
 	char username[maxLen], password[maxLen];
 	int indexOfBuyer;
 	cout << " Please log in to the system in order to add a feedback to a seller" << endl;
 	cout << "Please enter your username: " << endl;
-	cin.getline(username, maxLen);
+	cin.getline(username, maxLen); //PROBLEM WITH THE ENTER. CURRENTLY NEED TO PRESS ENTER TWICW.
 	cout << "Please enter your password: " << endl;
 	cin.getline(password, maxLen);
 
@@ -246,32 +259,36 @@ void addFeedback(Buyer** AllBuyers, Seller** AllSellers, int& TotalSellerslogSiz
 
 	char feedback[maxFeedbackLen];
 	char SellerName[maxLen];
-	int indexOfSeller;
-
-	cout << "please enter the username of the seller you wish to give a feedback to " << endl;
-	cin.getline(SellerName, maxLen);
-
-	bool found = IsSellerInSystemV2(AllSellers, TotalSellerslogSize, SellerName, indexOfSeller);
-	if (!found)
+	
+	if (AllBuyers[indexOfBuyer]->getPurchasedFromSz() != 0) // check if there were any purchases
 	{
-		cout << "the name you enterd does not exist in the system. please try again." << endl;
-		return;
-	}
+		cout << "please enter the username of the seller you wish to give a feedback to " << endl;
+		AllBuyers[indexOfBuyer]->showPurchasedFrom(); 
+		cin.getline(SellerName, maxLen);
 
-	bool ifPurchased = checkIfPurchasedFrom(AllBuyers, AllSellers, TotalBuyerslogSize, TotalSellerslogSize, SellerName,
-		username); // need to check if buyer purchased from seller
-	if (!ifPurchased)
-	{
-		cout << "Error: You didn't purchase item from the seller: " << SellerName << endl;
-		return;
+
+
+		bool found = IfPurchasedFrom(SellerName, AllBuyers[indexOfBuyer]);
+		if (!found)
+		{
+			cout << "the name you enterd does not exist in the system. please try again." << endl;
+			return;
+		}
+
+		
+
+		cout << "Please enter the feedback you want to give to the seller (max 100 letters)" << endl;
+		/*cleanBuffer();//NEED TO FIX. SOMETHING WITH THE cleanBuffer().*/
+		cin.getline(feedback, maxFeedbackLen);
+		GiveFeedbackToSeller(feedback, AllBuyers[indexOfBuyer],SellerName);
 	}
-		 
-	cout << "Please enter the feedback you want to give to the seller (max 100 letters)" << endl;
-	cleanBuffer();
-	cin.getline(feedback, maxFeedbackLen);
-	// insert the feedback to the seller //
-	GiveFeedbackToSeller(AllSellers[indexOfSeller], feedback,username);
+	else
+		cout << "in order to place a feedback to a seller , you need to purchase from the seller first " << endl;
+
+
 }
+
+
 
 void addItemtobuyer(Buyer** AllBuyers, Seller** AllSellers, const int& TotalBuyerslogSize, const int& TotalSellerslogSize)
 {
@@ -330,7 +347,8 @@ void FindAndAddItem(const int& CategoryChoice, Buyer* TheBuyer, Seller** AllSell
 	}
 	cout << "To exit press 1, to continue purchase press 2 and enter" << endl;
 	cin >> val;
-	while (!(val == 1) || (val == 2))
+	////// NEED TO FIX
+	while (!((val == 1) || (val == 2)))
 	{
 		cout << " Please enter ""1"" to exit or ""2"" to continue" << endl;
 		cin.clear();
@@ -342,8 +360,9 @@ void FindAndAddItem(const int& CategoryChoice, Buyer* TheBuyer, Seller** AllSell
 	else
 	{
 		cout << endl << "For adding an item to your cart please enter seller's name and item name: \n Seller name:";
+		cleanBuffer();
 		cin.getline(Sellername, maxLen);
-		cout << "Item name: ";
+		cout << "Item name: " << endl;
 		cin.getline(ItemName, ItemNameMAXlen);
 	}
 
@@ -362,19 +381,23 @@ void AddItemtobuyerFINAL(Buyer* TheBuyer, Seller** AllSellers, int& Sellers_sz, 
 			if (AllSellers[i]->HaveCategory(Category)) // If the seller really have the category that the buyer looked for
 			{
 				item = AllSellers[i]->getItem(Category, TheItem);
+				break;
 
 			}
 		} 
 	}
 	if (item != nullptr) // meaning we found the item of choice.
 	{
-		InsertToBuyersCart(TheBuyer, AllSellers[i], item); // need to insert the item we found to the buyer
+		InsertToBuyersCart(TheBuyer, AllSellers[i], item); // i = 1  , and AllSellers[1] is not initilized.
 	}
 
 
 }
 
-void InsertToBuyersCart(Buyer* TheBuyer, Seller* TheSeller, Item* item)
+
+
+void InsertToBuyersCart(Buyer* TheBuyer, Seller* TheSeller, Item* item) // were recieving UNINITIAZLIZED SELLER!!//
+// try sending the adress of AllSellers[i].
 {
 	TheBuyer->InsertItem(item);
 	TheBuyer->UpdatePurchasedFromArr(TheSeller);
@@ -401,43 +424,40 @@ bool IsBuyerInSystem(Buyer** Buyers, const int& TotalBuyersLogSize, char* userna
 	return false;
 }
 
-bool IsSellerInSystemV2(Seller** Sellers, const int& TotalSellerslogSize, char* username,int& index) // find the seller in the sellers array
+
+
+bool IfPurchasedFrom(char* TheSeller, Buyer* TheBuyer)
 {
-	for (int i = 0; i < TotalSellerslogSize; i++)
-	{
-		if (strcmp((Sellers)[i]->getUsername(), username) == 0) // search for the seller in the system
-		{
-			index = i; // update index by ref so we can locate the seller in the array afterwards.
+		if (TheBuyer->getSeller(TheSeller))// search for the seller in the buyers purchased from array.
 			return true;
-		}
-			
-	}
+	
 	return false;
 }
 
-bool checkIfPurchasedFrom(Buyer** AllBuyers, Seller** AllSellers, int& TotalBuyerslogSize, int& TotalSellerslogSize, char* SellerName,
-	                      char* username)
-{
-	int i, j;
-	for (i = 0; i < TotalBuyerslogSize; i++)
-	{
-		if (strcmp((*AllBuyers)[i].getUsername(), username) == 0) // need to locate the buyer and check if he purchased from the seller
-		{
-			for (j = 0; j < (*AllBuyers)[i].getPurchasedFromSz(); j++)
-			{
-				if (strcmp((*AllBuyers)[i].getSeller(j)->getUsername(), SellerName) == 0) // locate the seller in the buyer purchased from arr.
-				{
-					return true;
-				}
-			}
-		}
-	}
-	return false;
-}
+//bool checkIfPurchasedFrom(Buyer** AllBuyers, Seller** AllSellers, int& TotalBuyerslogSize, int& TotalSellerslogSize, char* SellerName,
+//	                      char* username)
+//{
+//	int i, j;
+//	for (i = 0; i < TotalBuyerslogSize; i++)
+//	{
+//		if (strcmp((*AllBuyers)[i].getUsername(), username) == 0) // need to locate the buyer and check if he purchased from the seller
+//		{
+//			for (j = 0; j < (*AllBuyers)[i].getPurchasedFromSz(); j++)
+//			{
+//				if (strcmp((*AllBuyers)[i].getSeller(j)->getUsername(), SellerName) == 0) // locate the seller in the buyer purchased from arr.
+//				{
+//					return true;
+//				}
+//			}
+//		}
+//	}
+//	return false;
+//}
 
-void GiveFeedbackToSeller(Seller* TheSeller , char* feedback,char* BuyerName) // friend fucntion of Seller obj? //
+
+void GiveFeedbackToSeller(char* feedback,Buyer* TheBuyer,char* SellerName) // friend fucntion of Seller obj? //
 {
-	TheSeller->addFeedback(feedback,BuyerName);
+	(TheBuyer->getSeller(SellerName))->addFeedback(feedback, TheBuyer->getUsername()); // find the seller in the buyer purchased from arr and then add feedback to that seller
 }
 
 

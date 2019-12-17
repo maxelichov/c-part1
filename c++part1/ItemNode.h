@@ -15,7 +15,7 @@ public:
 	ItemNode();
 	ItemNode(Item& newItem);
 	void showNode();
-	/*where is the d'tor?*/
+	~ItemNode();
 	friend class ItemList;
 
 };

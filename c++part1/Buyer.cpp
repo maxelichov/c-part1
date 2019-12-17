@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "buyer.h"
 #include "Address.h"
-//#include "Shoppingcart.h"
+#include "Shoppingcart.h"
 #include <string.h>
 #include <iostream>
 #pragma warning(disable: 4996)
@@ -166,10 +166,17 @@ int Buyer::getPurchasedFromSz() const
 	return PurchasedFrom_sz;
 }
 
-Seller* Buyer::getSeller(int& index)
+Seller* Buyer::getSeller(const char* Sellername)
 {
-	return PurchasedFromArr[index];
+	int i;
+	for (i = 0; i < PurchasedFrom_sz; i++)
+	{
+		if (strcmp(PurchasedFromArr[i]->getUsername(), Sellername) == 0)
+			return PurchasedFromArr[i];
+	}
+	return nullptr;
 }
+
 
 void Buyer:: InsertItem(Item* item)
 {
@@ -178,10 +185,46 @@ void Buyer:: InsertItem(Item* item)
 
 void Buyer::UpdatePurchasedFromArr(Seller* TheSeller)
 {
-	PurchasedFromArr[PurchasedFrom_sz] = TheSeller;
-	PurchasedFrom_sz++;
+	if (PurchasedFrom_sz == 0) //First purchase
+	{
+		PurchasedFromArr = new Seller*[PurchasedFrom_sz + 1];
+		PurchasedFromArr[0] = TheSeller;
+		PurchasedFrom_sz++;
+	}
+	else
+	{
+
+		int i = 0;
+		Seller** temp = new Seller*[PurchasedFrom_sz + 1]; // need to if already bought from the seller.
+		for (i = 0; i < PurchasedFrom_sz; i++)
+		{
+			temp[i] = PurchasedFromArr[i];
+		}
+		temp[i] = TheSeller;
+		delete[] PurchasedFromArr;
+		PurchasedFromArr = temp;
+		PurchasedFrom_sz++; 
+
+	}
 }
 
+void Buyer :: showPurchasedFrom()
+{
+	int purchasedFrom = this->getPurchasedFromSz();
+	if (purchasedFrom == 0)
+	{
+		cout << "you havent purchased any items yet" << endl;
+		
+	}
+	else
+	{
+		cout << "sellers you purchased from are : " << endl;
+		for (int i = 0; i < purchasedFrom; i++)
+		{
+			cout << i+1 <<" :" <<this->PurchasedFromArr[i]->getUsername() << endl;
+		}
+	}
+}
 //Buyer::Buyer(const Buyer& other)
 //{
 //	TotalItemsIndex = other.TotalItemsIndex;

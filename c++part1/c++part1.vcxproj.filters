@@ -24,9 +24,6 @@
     <ClInclude Include="Seller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cart.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Merchandise.h">
       <Filter>Header Files</Filter>
     </ClInclude>
