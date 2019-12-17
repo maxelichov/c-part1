@@ -177,11 +177,29 @@ Seller* Buyer::getSeller(const char* Sellername)
 	return nullptr;
 }
 
+void Buyer::ShowCart()
+{
+	b_Cart.ShowCart();
+}
+
+int Buyer::getPriceOfCart()
+{
+	return b_Cart.GetTotalPrice();
+}
+
 
 void Buyer:: InsertItem(Item* item)
 {
 	b_Cart.AddItemToCart(*item);
 }
+
+//bool Buyer::IsPurchasedFrom(char* SellerName) //maybe delete in future
+//{
+//	if (this->getSeller(SellerName));
+//	return false;
+//	
+//	return true;
+//}
 
 void Buyer::UpdatePurchasedFromArr(Seller* TheSeller)
 {
@@ -191,9 +209,14 @@ void Buyer::UpdatePurchasedFromArr(Seller* TheSeller)
 		PurchasedFromArr[0] = TheSeller;
 		PurchasedFrom_sz++;
 	}
+	
+	
 	else
 	{
-
+		
+		if (this->getSeller(TheSeller->getUsername())) // If the seller already appears in the purchasedfrom arr.
+			return;
+		
 		int i = 0;
 		Seller** temp = new Seller*[PurchasedFrom_sz + 1]; // need to if already bought from the seller.
 		for (i = 0; i < PurchasedFrom_sz; i++)
@@ -203,6 +226,7 @@ void Buyer::UpdatePurchasedFromArr(Seller* TheSeller)
 		temp[i] = TheSeller;
 		delete[] PurchasedFromArr;
 		PurchasedFromArr = temp;
+
 		PurchasedFrom_sz++; 
 
 	}
@@ -224,6 +248,11 @@ void Buyer :: showPurchasedFrom()
 			cout << i+1 <<" :" <<this->PurchasedFromArr[i]->getUsername() << endl;
 		}
 	}
+}
+
+void Buyer::resetCart()
+{
+	b_Cart.RemoveAllItems();
 }
 //Buyer::Buyer(const Buyer& other)
 //{

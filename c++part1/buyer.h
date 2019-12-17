@@ -36,7 +36,10 @@ public:
 	void InsertItem(Item* item);
 	void UpdatePurchasedFromArr(Seller* TheSeller);
 	void showPurchasedFrom();
-
+	void ShowCart();
+	int getPriceOfCart();
+	void resetCart();
+	bool IsPurchasedFrom(char* SellerName);
 
 
 

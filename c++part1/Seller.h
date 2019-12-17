@@ -26,6 +26,7 @@ public:
 	bool setPassword(char* Password);
 	char* getUsername() const;
 	char* getPassword() const;
+	void ShowStock();
 	void s_show()   const;
 	void AddItemToStock(Item& NewItem,int Category); 
 	void addFeedback(char* feedback,char* BuyerName);

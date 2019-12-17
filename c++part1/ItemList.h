@@ -14,8 +14,7 @@ public:
 	void insert(Item& item);
 	bool removeSingle(Item& item);
 	bool removeSingle(const char* ItemName); 
-	/*bool removeSingle( const char* serialNumber);//TODO*/
-	void removeAllItems(); //TODO
+	void removeAllItems(); 
 	Item& getItem(Item& item); //TODO
 	Item* getItem(const char* itemName); //return a pointer or reference?
 	int getSize();

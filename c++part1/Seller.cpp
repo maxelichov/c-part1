@@ -164,6 +164,16 @@ void Seller::addFeedback(char* feedback,char* BuyerName)
 	allFeedBacks.AddFeedbackToSeller(feedback,BuyerName);
 }
 
+void Seller::ShowStock()
+{
+	const char* Categories[] = { "Children" , "Clothing" , "Electricity" , "Office" };
+	for (int i = 0; i < TotalDepartments; i++)
+	{
+		s_Merch.ShowDepartment(Categories[i]);
+	}
+
+}
+
 
 int Seller::getCategoriesSize()
 {

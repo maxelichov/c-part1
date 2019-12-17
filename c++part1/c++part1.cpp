@@ -16,7 +16,8 @@ using namespace std;
 #define maxFeedbackLen 100
 #define maxLen 31
 using namespace std;
-#define EXIT 11
+#define EXIT 3
+#define ExitBuyerMenu 4
 const char* Categories[] = { "Children" , "Clothing" , "Electricity" , "Office" };
 enum eCategory { Children, Clothing, Electricity, Office };
 #define TotalCategories 4
@@ -32,22 +33,31 @@ void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSi
 	int& TotalSellersPhysSize);
 void cleanBuffer();
 void addItem(Seller** Sellers, int& size);
-void AddtoSeller(Seller* Sellers, int& index);
-void addItemToSeller(Seller* Sellers, int& index, Item* item);
-void addFeedback(Buyer** AllBuyers, Seller** AllSellers, int& TotalSellerslogSize, int& TotalBuyerslogSize);
-bool IsSellerInSystem(Seller** Sellers, const int& TotalSellerslogSize, char* username, char* password);
+void AddtoSeller(Seller* Sellers);
+void addItemToSeller(Seller* Sellers,  Item* item);
+void addFeedback(Buyer* TheBuyer);
+bool IsSellerInSystem(Seller** Sellers, const int& TotalSellerslogSize, char* username, char* password,int& index);
 bool IsBuyerInSystem(Buyer** Buyers, const int& TotalBuyersLogSize, char* username, char* password, int& index);
 bool IfPurchasedFrom(char* TheSeller, Buyer* TheBuyer);
 //bool checkIfPurchasedFrom(Buyer** AllBuyers, Seller** AllSellers, int& TotalBuyerslogSize, int& TotalSellerslogSize, char* SellerName,
 //	char* username);
 void GiveFeedbackToSeller(char* feedback, Buyer* TheBuyer, char* SellerName);
 void FindAndAddItem(const int& CategoryChoice, Buyer* TheBuyer, Seller** AllSellers, int Sellers_sz);
-void addItemtobuyer(Buyer** AllBuyers, Seller** AllSellers, const int& TotalBuyerslogSize, const int& TotalSellerslogSize);
+void addItemtobuyer(Buyer* TheBuyer, Seller** AllSellers,const int& TotalSellerslogSize);
 bool ValidateCategory(int choice);
 void AddItemtobuyerFINAL(Buyer* TheBuyer, Seller** AllSellers, int& Sellers_sz, char* TheSeller, char* TheItem, const char* Category);
 void InsertToBuyersCart(Buyer* TheBuyer, Seller* TheSeller, Item* item);
-
-
+void Register(Buyer*** AllBuyers, int& TotalBuyersLogSize, int& TotalBuyersPhysSize,
+	Seller*** AllSellers, int& TotalSellerslogSize, int& TotalSellersPhysSize);
+bool validateRegisterMenu(int& choice);
+void RegisterMenu(int& choice, Buyer*** AllBuyers, int& TotalBuyersLogSize, int& TotalBuyersPhysSize,
+	Seller*** AllSellers, int& TotalSellerslogSize, int& TotalSellersPhysSize);
+void caseBuyer(Buyer* TheBuyer, Seller** AllSellers, int& TotalSellerslogSize);
+void displayBuyerMenu(Buyer* TheBuyer);
+void SignIn(Buyer** AllBuyers, Seller** AllSellers, int& TotalBuyerslogSize, int& TotalSellerslogSize);
+void caseSeller(Seller* TheSeller);
+void ShowStock(Seller* TheSeller);
+void MakeAPurchase(Buyer* TheBuyer);
 
 int main()
 {
@@ -57,34 +67,222 @@ int main()
 	int TotalSellerslogSize = 0, TotalSellersPhysSize = 1;
 	Buyer** AllBuyers = nullptr;
 	Seller** AllSellers = nullptr;
+
 	do {
 		displayMenu();
 		cin >> MenuChoice;
 		Input = validateChoice(MenuChoice);
 		cleanBuffer();
-		if (Input)
-			ExecuteChoice(MenuChoice, &AllBuyers, TotalBuyerslogSize, TotalBuyersPhysSize, &AllSellers,
+		switch (MenuChoice)
+		{
+		case 1:
+			SignIn(AllBuyers, AllSellers, TotalBuyerslogSize, TotalSellerslogSize);
+			break;
+
+		case 2:
+		 	Register(&AllBuyers, TotalBuyerslogSize, TotalBuyersPhysSize, &AllSellers,
 				TotalSellerslogSize, TotalSellersPhysSize);
-		else
-			cout << "Invalid number entered please try again!" << endl;
+			break;
+ 
+
+		case 3:
+			exit(0);
+			
+
+		default:
+			break;
+
+		}
 	} while (MenuChoice != EXIT);
 	cout << "Exiting Program";
 	return 1;
 }
 void displayMenu()
 {
-	cout << "Welcome to our Interactive Menu please choose one of the following by entering the number of it :" << endl;
+	cout << "Please select your choice: \n 1. Sign in \n 2. Register \n 3. Exit" << endl;
+	
+	/*cout << "Welcome to our Interactive Menu please choose one of the following by entering the number of it :" << endl;
 	cout << "1. Add a buyer " << endl << "2. Add a seller " << endl << "3. Add an item to a seller"
 		<< endl << "4. Add a feedback to a seller" << endl << "5. Add an item to your shopping cart" <<
 		endl << "6. Make an order" << endl << "7. Make a payment " << endl << "8. Show all buyers info" <<
-		endl << "9. Show all Sellers info" << endl << "10. Show All the Items with the same name" << endl << "11. Exit program" << endl;
+		endl << "9. Show all Sellers info" << endl << "10. Show All the Items with the same name" << endl << "11. Exit program" << endl;*/
 }
 bool validateChoice(int& MenuChoice) // sending by ref for efficency //
 {
-	if (MenuChoice >= 1 && MenuChoice <= 11)
-		return 1;
+	if (MenuChoice >= 1 && MenuChoice <= 3)
+		return true;
 	else
-		return 0;
+		return false;
+}
+
+void Register(Buyer*** AllBuyers, int& TotalBuyersLogSize, int& TotalBuyersPhysSize,
+	Seller*** AllSellers, int& TotalSellerslogSize, int& TotalSellersPhysSize)
+{
+	int choice;
+	cout << "Please select you choice: \n 1. Register as Buyer \n 2. Regiseter as Seller \n ";
+	 cin >> choice;
+
+	 bool valid = validateRegisterMenu(choice);
+
+		 if (!valid)
+		 {
+			 cout << "Wrong Input " << endl;
+			 return;
+		 }
+
+		 RegisterMenu(choice,AllBuyers, TotalBuyersLogSize, TotalBuyersPhysSize,
+			 AllSellers, TotalSellerslogSize, TotalSellersPhysSize);
+}
+
+bool validateRegisterMenu(int& choice)
+{
+	if (choice < 1 || choice > 2)
+		return false;
+
+	return true;
+}
+
+void RegisterMenu(int& choice, Buyer*** AllBuyers, int& TotalBuyersLogSize, int& TotalBuyersPhysSize,
+	Seller*** AllSellers, int& TotalSellerslogSize, int& TotalSellersPhysSize)
+{
+	switch (choice)
+	{
+	case 1: // Add buyer case
+		addUser(AllBuyers, TotalBuyersLogSize, TotalBuyersPhysSize, choice, AllSellers, TotalSellerslogSize, TotalSellersPhysSize);
+		break;
+	case 2: // Add seller case
+		addUser(AllBuyers, TotalBuyersLogSize, TotalBuyersPhysSize, choice, AllSellers, TotalSellerslogSize, TotalSellersPhysSize);
+		break;
+	}
+}
+
+
+
+void SignIn(Buyer** AllBuyers, Seller** AllSellers, int& TotalBuyerslogSize, int& TotalSellerslogSize)
+{
+	char password[maxLen], username[maxLen];
+	bool IsBuyer = false, IsSeller = false;
+	int index;
+
+	cout << "Please enter your username: \n";
+	cin >> username;
+	cout << "Please enter your password: \n";
+	cin >> password;
+
+	IsBuyer = IsBuyerInSystem(AllBuyers, TotalBuyerslogSize, username, password, index);
+	if (IsBuyer)
+	{
+		caseBuyer(AllBuyers[index], AllSellers, TotalSellerslogSize);
+
+	}
+	else if(IsSeller = IsSellerInSystem(AllSellers, TotalSellerslogSize, username, password, index))
+	{
+		caseSeller(AllSellers[index]);
+	}
+
+		if (IsBuyer == false && IsSeller == false)
+			cout << "Username or password is incorrect" << endl;
+		
+}
+
+void displayBuyerMenu(Buyer* TheBuyer)
+{
+	cout << "Welcome " << TheBuyer->getUsername() << "!" << endl;
+	cout << "Please select your choice from the menu: " << endl;
+	cout << "1. Add feedback to a seller \n 2. Add an item to your cart \n 3. Make an order \n 4. Return to main menu" << endl;
+}
+
+ void displaySellerMenu(Seller* TheSeller)
+{
+	 cout << "Welcome " << TheSeller->getUsername() << "!" << endl;
+	 cout << "Please select your choice from the menu: " << endl;
+	 cout << "1. Add an item to your stock \n 2. Show all the current items in your stock" <<
+		 "3. Return to main menu" << endl;
+
+}
+void caseSeller(Seller* TheSeller)
+{
+	int choice;
+	do {
+		displaySellerMenu(TheSeller);
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+			AddtoSeller(TheSeller);
+			break;
+
+		case 2:
+			ShowStock(TheSeller);
+			break;
+
+		default:
+			break;
+
+		}
+
+	} while (choice != EXIT);
+	
+}
+
+void ShowStock(Seller* TheSeller)
+{
+	TheSeller->ShowStock();
+}
+
+void caseBuyer(Buyer* TheBuyer, Seller** AllSellers, int& TotalSellerslogSize)
+{
+	int choice;
+	do {
+		displayBuyerMenu(TheBuyer);
+		cin >> choice;
+		switch (choice)
+		{
+		case 1: // add feedback to seller
+			addFeedback(TheBuyer); // TODO
+			break;
+		case 2:
+			addItemtobuyer(TheBuyer, AllSellers, TotalSellerslogSize);
+			break;
+
+		case 3:
+			MakeAPurchase(TheBuyer);
+			break;
+
+		default:
+			break;
+
+		}
+
+
+	} while (choice != ExitBuyerMenu);
+	
+}
+
+void MakeAPurchase(Buyer* TheBuyer)
+{
+	if (TheBuyer->getPurchasedFromSz() == 0)
+	{
+		cout << "Error: Your cart is empty " << endl;
+		return;
+	}
+	cout << "All the items in your cart are: " << endl;
+	TheBuyer->ShowCart();
+	cout << "\n The total price of your cart is: " << TheBuyer->getPriceOfCart() << endl;
+	cout << "to purchase all the items in your cart press 1" << endl;
+	cout << "to purchase some items from you cart press 2" << endl;
+	int Purchase;
+	cin >> Purchase;
+	if(Purchase == 1)
+	{
+		TheBuyer->resetCart();
+		// if seller  appears in purchsedArr purchasedSZ DOESNT DO ++.
+	}
+	else
+	{
+
+	}
+
 }
 
 void ExecuteChoice(int& MenuChoice, Buyer*** AllBuyers, int& TotalBuyersLogSize, int& TotalBuyersPhysSize,
@@ -101,24 +299,18 @@ void ExecuteChoice(int& MenuChoice, Buyer*** AllBuyers, int& TotalBuyersLogSize,
 	case 3: // Add new item to seller
 		addItem(*AllSellers,TotalSellerslogSize);
 		break;
-	case 4: // add feedback to seller
-		addFeedback(*AllBuyers, *AllSellers , TotalSellerslogSize,TotalBuyersLogSize); // TODO
-		break;
-	case 5:
-		addItemtobuyer(*AllBuyers, *AllSellers, TotalBuyersLogSize, TotalSellerslogSize);
-		break;
-	case 6:
-		/*MakeAPurchase()*/
+
 
 		default:
 			break;
 	}
 }
 
-/*void MakePurchase()
+void MakePurchase(Buyer)
 {
+	cout << "choose the item you wish to buy from the shopping cart" << endl;
 
-}*/
+}
 
 void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSize, int& Choice, Seller*** AllSellers, int& TotalSellerslogSize,
 	int& TotalSellersPhysSize) // function for both to add buyer and seller instead of 2 funcs.
@@ -184,8 +376,9 @@ void addItem(Seller** Sellers, int& size)
 	cin.getline(username, maxLen);
 	cout << "Please enter your password: " << endl;
 	cin.getline(password, maxLen);
+	int index; // maybe need to change
 
-	bool Valid = IsSellerInSystem(Sellers, size, username, password);
+	bool Valid = IsSellerInSystem(Sellers, size, username, password,index);
 
 	if (!Valid)
 		cout << "Error: Seller " << username << " is not in the system with the password " << password << endl;
@@ -193,21 +386,21 @@ void addItem(Seller** Sellers, int& size)
 	return;
 }
 
-bool IsSellerInSystem(Seller** Sellers, const int& TotalSellerslogSize, char* username, char* password)
+bool IsSellerInSystem(Seller** Sellers, const int& TotalSellerslogSize, char* username, char* password,int& index)
 {
 	for (int i = 0; i < TotalSellerslogSize; i++)
 	{
 		if (strcmp((Sellers)[i]->getUsername(), username) == 0 && strcmp((Sellers)[i]->getPassword(), password) == 0) // search for the seller in the system
 		{
 			cout << "login successful! Welcome " << username << "!" << endl;
-			AddtoSeller(Sellers[i], i); // After we found our seller in the system, we need to add the item.
+			index = i;
 			return true;
 		}
 	}
 	return false;
 }
 
-void AddtoSeller(Seller* SellerToAdd, int& position)
+void AddtoSeller(Seller* SellerToAdd)
 {		// recieves the sellers array and the index of which specific seller is located in the array.
 	int Category, price;
 	char ItemName[ItemNameMAXlen];
@@ -223,10 +416,10 @@ void AddtoSeller(Seller* SellerToAdd, int& position)
 	cin >> price;
 
 	Item* item = new Item(ItemName, price, Category); // Make a new item from the data we got about it.
-	addItemToSeller(SellerToAdd, position, item);
+	addItemToSeller(SellerToAdd,  item);
 }
 
-void addItemToSeller(Seller* TheSeller, int& index, Item* item)
+void addItemToSeller(Seller* TheSeller,  Item* item)
 {
 	TheSeller->AddItemToStock(*item, item->getItemCategory()); // Add the item to the seller's merch
 }
@@ -238,49 +431,30 @@ void PurchasedFrom(Buyer* TheBuyer)
 
 }
 
-void addFeedback(Buyer** AllBuyers, Seller** AllSellers, int& TotalSellerslogSize, int& TotalBuyerslogSize)
-{	/*need to login as buyer before adding a feedback*/
-	char username[maxLen], password[maxLen];
-	int indexOfBuyer;
-	cout << " Please log in to the system in order to add a feedback to a seller" << endl;
-	cout << "Please enter your username: " << endl;
-	cin.getline(username, maxLen); //PROBLEM WITH THE ENTER. CURRENTLY NEED TO PRESS ENTER TWICW.
-	cout << "Please enter your password: " << endl;
-	cin.getline(password, maxLen);
-
-	bool Valid = IsBuyerInSystem(AllBuyers, TotalBuyerslogSize, username, password,indexOfBuyer);
-	if (!Valid)
-	{
-		cout << "Error: Buyer " << username << " Is not in the system with the password " << password << endl;
-		return;
-	}
-
-	cout << "Welcome " << username << endl;
+void addFeedback(Buyer* TheBuyer)
+{	
 
 	char feedback[maxFeedbackLen];
 	char SellerName[maxLen];
 	
-	if (AllBuyers[indexOfBuyer]->getPurchasedFromSz() != 0) // check if there were any purchases
+	if (TheBuyer->getPurchasedFromSz() != 0) // check if there were any purchases
 	{
 		cout << "please enter the username of the seller you wish to give a feedback to " << endl;
-		AllBuyers[indexOfBuyer]->showPurchasedFrom(); 
+		TheBuyer->showPurchasedFrom(); 
 		cin.getline(SellerName, maxLen);
 
 
-
-		bool found = IfPurchasedFrom(SellerName, AllBuyers[indexOfBuyer]);
+		bool found = IfPurchasedFrom(SellerName, TheBuyer);
 		if (!found)
 		{
 			cout << "the name you enterd does not exist in the system. please try again." << endl;
 			return;
 		}
 
-		
-
 		cout << "Please enter the feedback you want to give to the seller (max 100 letters)" << endl;
 		/*cleanBuffer();//NEED TO FIX. SOMETHING WITH THE cleanBuffer().*/
 		cin.getline(feedback, maxFeedbackLen);
-		GiveFeedbackToSeller(feedback, AllBuyers[indexOfBuyer],SellerName);
+		GiveFeedbackToSeller(feedback, TheBuyer,SellerName);
 	}
 	else
 		cout << "in order to place a feedback to a seller , you need to purchase from the seller first " << endl;
@@ -290,7 +464,7 @@ void addFeedback(Buyer** AllBuyers, Seller** AllSellers, int& TotalSellerslogSiz
 
 
 
-void addItemtobuyer(Buyer** AllBuyers, Seller** AllSellers, const int& TotalBuyerslogSize, const int& TotalSellerslogSize)
+void addItemtobuyer(Buyer* TheBuyer, Seller** AllSellers, const int& TotalSellerslogSize)
 {
 	if (TotalSellerslogSize == 0) // no sellers in the system, can't add any item
 	{
@@ -298,24 +472,11 @@ void addItemtobuyer(Buyer** AllBuyers, Seller** AllSellers, const int& TotalBuye
 		return;
 	}
 
-	int CategoryChoice, BuyerIndex;
+	int CategoryChoice;
 	bool res;
-	/*need to login as buyer before adding a feedback*/
-	char username[maxLen], password[maxLen];
-	cout << " Please log in to the system in order to add an item to your cart" << endl;
-	cout << "Please enter your username: " << endl;
-	cin.getline(username, maxLen);
-	cout << "Please enter your password: " << endl;
-	cin.getline(password, maxLen);
-	
-	bool Valid = IsBuyerInSystem(AllBuyers, TotalBuyerslogSize, username, password,BuyerIndex);
-	if (!Valid)
-	{
-		cout << "Error: Buyer " << username << " is not in the system with the password " << password << endl;
-		return;
-	}
 
-	cout << "Welcome " << username << endl << "Pick a category: " << endl;
+
+	cout << "Pick a category: " << endl;
 	for (int i = 0; i < TotalCategories; i++)
 		cout << i << " - " << Categories[i] << endl; // prints all the categories to the console //
 
@@ -328,7 +489,7 @@ void addItemtobuyer(Buyer** AllBuyers, Seller** AllSellers, const int& TotalBuye
 		res = ValidateCategory(CategoryChoice);
 	}
 
-	FindAndAddItem(CategoryChoice, AllBuyers[BuyerIndex], AllSellers, TotalSellerslogSize);
+	FindAndAddItem(CategoryChoice, TheBuyer, AllSellers, TotalSellerslogSize);
 
 }
 

@@ -12,6 +12,11 @@ bool ShoppingCart::AddItemToCart(Item& ChosenItem)
 
 }
 
+void ShoppingCart::ShowCart()
+{
+	Cart->showList();
+}
+
 void ShoppingCart::RemoveFromCart(Item& ChosenItem)
 {	
 	
@@ -36,8 +41,16 @@ bool ShoppingCart::isEmpty()
 	return Cart->isEmpty();
 }
 
-
+void ShoppingCart::RemoveAllItems()
+{
+	Cart->removeAllItems();
+}
 ShoppingCart :: ~ShoppingCart()
 {
 	delete Cart;
+}
+
+int ShoppingCart::GetTotalPrice()
+{
+	return TotalPrice;
 }

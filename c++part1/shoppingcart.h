@@ -18,6 +18,8 @@ public:
 	bool AddItemToCart(Item& ChosenItem);
 	void RemoveFromCart(Item& ChosenItem);
 	void RemoveFromCart( const char* ItemName);
-	int GetTotalPrice(); //Todo
+	int GetTotalPrice(); 
 	bool isEmpty();
+	void ShowCart();
+	void RemoveAllItems();
 };
