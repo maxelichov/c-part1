@@ -16,15 +16,22 @@ FeedbackNode::FeedbackNode()
 
 FeedbackNode::FeedbackNode(const char* Feedback, char* BuyerName)
 {
-	BuyerThatGaveFeedback = new char[strlen(BuyerName) + 1];
-	strcpy(BuyerThatGaveFeedback, BuyerName);
+	BuyerThatGaveFeedback = strdup(BuyerName);
+		/*new char[strlen(BuyerName) + 1];
+	strcpy(BuyerThatGaveFeedback, BuyerName);*/
 
-	TheFeedback = new char[strlen(Feedback) + 1];
-	strcpy(TheFeedback, Feedback);
+	TheFeedback = strdup(Feedback);
+		/*new char[strlen(Feedback) + 1];
+	strcpy(TheFeedback, Feedback);*/
 
 	next = nullptr;
 }
 
+FeedbackNode::~FeedbackNode()
+{
+	delete[] BuyerThatGaveFeedback;
+	delete[] TheFeedback;
+}
 
 
 

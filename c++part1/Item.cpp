@@ -55,7 +55,6 @@ Item ::~Item()// dtor//
    // when item is sold to a buyer we need delete from sellers stock and add to buyer //
 	delete[] ItemName;
 	ItemName = nullptr;
-
 }
 
 bool Item::setItemName(const char* name)
@@ -81,11 +80,6 @@ bool Item::setItemPrice(int price)
 }
 
 
-/*bool Seller ::CheckSellerItemStock(Seller& seller)
-{
-
-}*/
-
 bool Item::setCategory(int newCategory)
 { 
 	if (newCategory >= 0 && newCategory <= 4)
@@ -110,7 +104,6 @@ int	Item::getItemPrice()
 int Item::getItemSerialNumber()
 {
 	return SerialNumber;
-
 }
 
 int  Item::getItemCategory()
@@ -120,5 +113,6 @@ int  Item::getItemCategory()
 
 void Item::showTheItem()
 {
-	cout << "Item Name: " << ItemName <<  ", Price: " << ItemPrice << endl;
+	cout << "Item Name: " << ItemName << ", Price: " << ItemPrice << ", Serial Number:" << SerialNumber << endl;
+	
 }

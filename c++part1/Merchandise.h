@@ -28,7 +28,7 @@ public:
 	int getTotalNumOfItems() const;
 	bool haveDepartment(const char* category);
 	void ShowDepartment(const char* department);
-	Item* getItemOfCategory(const char* Category,const char* ItemName);
+	Item* getItemOfCategory(const char* Category,int& SerialNumber);
 
 
 };

@@ -61,11 +61,11 @@ Merchandise::~Merchandise()
 {
 	for (int i = 0; i < this->getNumOfDepartments(); i++)
 	{
-		Departments[i]->getStock()->removeAllItems();
 		delete Departments[i];
-		
 	}
-	delete[] Departments;
+
+
+	/*delete Departments;*/
 }
 
 bool Merchandise::haveDepartment(const char* category)
@@ -89,14 +89,14 @@ void Merchandise::ShowDepartment(const char* department)
 	}
 }
 
-Item* Merchandise:: getItemOfCategory(const char* Category,const char* ItemName)
+Item* Merchandise:: getItemOfCategory(const char* Category,int& SerialNumber)
 {
 	Item item;
 	for (int i = 0; i < NumOfDepartments; i++)
 	{
 		if (Departments[i]->getDepartment(Category) == Category)
 		{
-			 return Departments[i]->getStock()->getItem(ItemName);
+			 return Departments[i]->getStock()->getItem(SerialNumber);
 		}
     }
 	return nullptr;

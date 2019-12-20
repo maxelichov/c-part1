@@ -88,10 +88,8 @@ bool Seller::setName(char* firstName, char* lastName)
 			return 0;
 		}
 	}
-	s_Firstname = new char[maxLen];
-	s_Lastname = new char[maxLen];
-	strcpy(s_Firstname, firstName);
-	strcpy(s_Lastname, lastName);
+	s_Firstname = strdup(firstName);
+	s_Lastname = strdup(lastName);
 	return 1;
 }
 
@@ -103,8 +101,7 @@ bool Seller::setUsername(char* username)
 		cout << "Invalid username" << endl;
 		return 0;
 	}
-	s_Username = new char[len];
-	strcpy(s_Username, username);
+	s_Username = strdup(username);
 
 	return 1;
 
@@ -118,8 +115,7 @@ bool Seller::setPassword(char* password)
 		cout << "Invalid password" << endl;
 		return 0;
 	}
-	s_Password = new char[len];
-	strcpy(s_Password, password);
+	s_Password = strdup(password);
 
 	return 1;
 
@@ -166,11 +162,16 @@ void Seller::addFeedback(char* feedback,char* BuyerName)
 
 void Seller::ShowStock()
 {
+	if (getCategoriesSize() == 0)
+		cout << "Your item stock is empty!" << endl; 
+
 	const char* Categories[] = { "Children" , "Clothing" , "Electricity" , "Office" };
+	cout << "\nYour items are:\n";
 	for (int i = 0; i < TotalDepartments; i++)
 	{
 		s_Merch.ShowDepartment(Categories[i]);
 	}
+	cout << endl;
 
 }
 
@@ -190,7 +191,7 @@ void Seller::showCategoryItems(const char* Category)
 	this->s_Merch.ShowDepartment(Category);
 }
 
-Item* Seller::getItem(const char* Category,const char* ItemName)
+Item* Seller::getItem(const char* Category,int& SerialNumber)
 {
-	return this->s_Merch.getItemOfCategory(Category,ItemName);
+	return this->s_Merch.getItemOfCategory(Category, SerialNumber);
 }

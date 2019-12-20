@@ -12,6 +12,7 @@ public:
 		
 	FeedbackNode();
 	FeedbackNode( const char* Feedback, char* BuyerName);
+	~FeedbackNode();
 
 
 	friend class FeedbackList;

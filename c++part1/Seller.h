@@ -33,7 +33,7 @@ public:
 	int getCategoriesSize();
 	bool HaveCategory(const char* Category);
 	void showCategoryItems(const char* Category);
-	Item* getItem(const char* Category,const char* ItemName);
+	Item* getItem(const char* Category,int& SerialNumber);
 
 	
 	/*bool CheckSellerItemStock(Seller& seller);*/

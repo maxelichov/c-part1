@@ -16,10 +16,18 @@ public:
 	ShoppingCart() : Cart(new ItemList()), TotalPrice(0) {}
 	~ShoppingCart();
 	bool AddItemToCart(Item& ChosenItem);
-	void RemoveFromCart(Item& ChosenItem);
-	void RemoveFromCart( const char* ItemName);
+	/*void RemoveFromCart(Item& ChosenItem);*/
+	void RemoveFromCart(const char* ItemName);
 	int GetTotalPrice(); 
 	bool isEmpty();
 	void ShowCart();
 	void RemoveAllItems();
+	/*void DecreaseTotalPriceByName(const char* ItemName);*/
+	Item* getItemFromCart(int& ItemSerialNumber);
+	void updateCart(ShoppingCart* newCart);
+	int getItemListSize() const;
+	ItemList* getCartList();
+	bool checkIfItemExists(Item& item);
+
+
 };

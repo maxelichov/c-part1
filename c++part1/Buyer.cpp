@@ -87,10 +87,8 @@ bool Buyer::setName(char* firstName, char* lastName)
 		}
 	}
 
-	b_Firstname = new char[maxLen];
-	b_Lastname = new char[maxLen];
-	strcpy(b_Firstname, firstName);
-	strcpy(b_Lastname, lastName);
+	b_Firstname = strdup(firstName);
+	b_Lastname = strdup(lastName);
 
 	return 1;
 }
@@ -103,8 +101,7 @@ bool Buyer::setUsername(char* username)
 		cout << "Invalid username" << endl;
 		return 0;
 	}
-	b_Username = new char[len];
-	strcpy(b_Username, username);
+	b_Username = strdup(username);
 
 	return 1;
 
@@ -118,8 +115,7 @@ bool Buyer::setPassword(char* password)
 		cout << "Invalid password" << endl;
 		return 0;
 	}
-	b_Password = new char[len];
-	strcpy(b_Password, password);
+	b_Password = strdup(password);
 
 	return 1;
 
@@ -132,14 +128,10 @@ Buyer::~Buyer()
 	delete[] b_Lastname;
 	delete[] b_Password;
 	delete[] b_Username;
+	delete[] PurchasedFromArr;
+	b_Cart.~ShoppingCart();
+	// need to delete shopping cart and purchased from arr?
 
-	if (TotalItemsIndex != 0)
-	{
-		//for (int i = 0; i < TotalItemsIndex; i++)
-		//	delete ShoppingCart[i];
-
-		//delete[]ShoppingCart;
-	}
 }
 
 void Buyer::b_show() const
@@ -147,7 +139,6 @@ void Buyer::b_show() const
 	cout << "Buyer name is: " << b_Firstname << " " << b_Lastname << endl;
 	cout << "Living in: ";
 	b_address.show();
-
 
 }
 
@@ -193,15 +184,33 @@ void Buyer:: InsertItem(Item* item)
 	b_Cart.AddItemToCart(*item);
 }
 
-//bool Buyer::IsPurchasedFrom(char* SellerName) //maybe delete in future
-//{
-//	if (this->getSeller(SellerName));
-//	return false;
-//	
-//	return true;
-//}
+void Buyer::setTotalItems(int& size)
+{
+	TotalItemsIndex = size;
 
-void Buyer::UpdatePurchasedFromArr(Seller* TheSeller)
+}
+
+void Buyer::UpdateCart(ShoppingCart* newCart)
+{
+	b_Cart.updateCart(newCart);
+}
+
+int Buyer::getTotalItems()
+{
+	return TotalItemsIndex;
+}
+
+void Buyer::showAddress() const
+{
+	b_address.show();
+}
+
+Item* Buyer::getItemFromCart(int& ItemSerialNumber)
+{
+	return b_Cart.getItemFromCart(ItemSerialNumber);
+}
+
+void Buyer::UpdatePurchasedFromArr(Seller* TheSeller) 
 {
 	if (PurchasedFrom_sz == 0) //First purchase
 	{
@@ -226,7 +235,6 @@ void Buyer::UpdatePurchasedFromArr(Seller* TheSeller)
 		temp[i] = TheSeller;
 		delete[] PurchasedFromArr;
 		PurchasedFromArr = temp;
-
 		PurchasedFrom_sz++; 
 
 	}
@@ -237,12 +245,12 @@ void Buyer :: showPurchasedFrom()
 	int purchasedFrom = this->getPurchasedFromSz();
 	if (purchasedFrom == 0)
 	{
-		cout << "you havent purchased any items yet" << endl;
+		cout << "You havent purchased any items yet" << endl;
 		
 	}
 	else
 	{
-		cout << "sellers you purchased from are : " << endl;
+		cout << "Sellers you purchased from are : " << endl;
 		for (int i = 0; i < purchasedFrom; i++)
 		{
 			cout << i+1 <<" :" <<this->PurchasedFromArr[i]->getUsername() << endl;
@@ -253,20 +261,15 @@ void Buyer :: showPurchasedFrom()
 void Buyer::resetCart()
 {
 	b_Cart.RemoveAllItems();
+	TotalItemsIndex = 0;
 }
-//Buyer::Buyer(const Buyer& other)
-//{
-//	TotalItemsIndex = other.TotalItemsIndex;
-//	b_FirstName = new char[strlen(other.b_FirstName) + 1];
-//	strcpy(b_FirstName, other.b_FirstName);
-//	b_LastName = new char[strlen(other.b_LastName) + 1];
-//	strcpy(b_LastName, other.b_LastName);
-//	b_Username = new char[strlen(other.b_Username) + 1];
-//	strcpy(b_Username, other.b_Username);
-//	b_Password = new char[strlen(other.b_Password) + 1];
-//	strcpy(b_Password, other.b_Password);
-//	b_address = new Address(other.b_address);
-//	ShoppingCart = new Item* (*other.ShoppingCart);
-//	FinalCart = new Item * (*other.FinalCart);
-//
-//}
+
+void Buyer::IncreaseTotalItems()
+{
+	TotalItemsIndex++;
+}
+
+void Buyer::DecreaseTotalItems()
+{
+	TotalItemsIndex--;
+}

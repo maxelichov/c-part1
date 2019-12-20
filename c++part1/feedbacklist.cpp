@@ -27,3 +27,16 @@ void FeedbackList ::insert(char* Feedback, char* BuyerName)
 	}
 
 }
+
+FeedbackList::~FeedbackList()
+{
+		FeedbackNode* node;
+		while (head)
+		{
+			node = head->next;
+			delete head; 
+			head = node;
+		}
+		head = tail = nullptr;
+	
+}

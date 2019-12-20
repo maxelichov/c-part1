@@ -12,4 +12,5 @@ public:
 
 	Feedback();
 	void AddFeedbackToSeller(char* Feedback , char* BuyerName);
+	~Feedback();
 };

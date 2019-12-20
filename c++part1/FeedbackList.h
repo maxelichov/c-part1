@@ -13,4 +13,6 @@ public:
 	
 	FeedbackList();
 	void insert(char* Feedback, char* BuyerName);
+	~FeedbackList();
+
 };

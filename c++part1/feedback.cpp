@@ -18,3 +18,9 @@ void Feedback:: AddFeedbackToSeller(char* Feedback, char* BuyerName)
 
 	FList->insert(Feedback, BuyerName);
 }
+
+
+Feedback::~Feedback()
+{
+	delete FList;
+}

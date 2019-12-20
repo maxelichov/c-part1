@@ -30,6 +30,7 @@ public:
 	bool setPassword(char* password);
 	char* getUsername() const;
 	char* getPassword() const;
+	void showAddress() const;
 	int getPurchasedFromSz () const;
 	void b_show() const;
 	Seller* getSeller(const char* Sellername);
@@ -39,7 +40,12 @@ public:
 	void ShowCart();
 	int getPriceOfCart();
 	void resetCart();
-	bool IsPurchasedFrom(char* SellerName);
+	void IncreaseTotalItems();
+	void DecreaseTotalItems();
+	Item* getItemFromCart(int& ItemSerialNumber);
+	void setTotalItems(int& size);;
+	void UpdateCart(ShoppingCart* newCart);
+	int getTotalItems();
 
 
 

@@ -93,22 +93,19 @@ bool Address::setLocation(char* location, int flag) // if flag == 0 set country 
 	}
 
 	if (flag == 0) {
-		Country = new char[strlen(location) + 1];/*need to change to strdup*/
-		strcpy(Country, location);
+		Country = strdup(location);
 		return 1;
 
 	}
 	else if (flag == 1)
-	{		/*need to change to strdup*/
-		City = new char[strlen(location) + 1];
-		strcpy(City, location);
+	{
+		City = strdup(location);
 		return 1;
 
 	}
 	else if (flag == 2)
-	{		/*need to change to strdup*/
-		Street = new char[strlen(location) + 1];
-		strcpy(Street, location);
+	{	
+		Street = strdup(location);
 		return 1;
 	}
 	else
