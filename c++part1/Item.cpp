@@ -91,28 +91,49 @@ bool Item::setCategory(int newCategory)
 }
 
 
-char* Item::getItemName()
+char* Item::getItemName() const
 {
 	return ItemName;
 }
 
-int	Item::getItemPrice()
+int	Item::getItemPrice() const
 {
 
 	return ItemPrice;
 }
-int Item::getItemSerialNumber()
+int Item::getItemSerialNumber() const
 {
 	return SerialNumber;
 }
 
-int  Item::getItemCategory()
+int  Item::getItemCategory() const
 {		
 	return  (int)itemCategory;
 }
 
-void Item::showTheItem()
+void Item::showTheItem() const
 {
 	cout << "Item Name: " << ItemName << ", Price: " << ItemPrice << ", Serial Number:" << SerialNumber << endl;
 	
+}
+
+Seller* Item::getSeller()
+{
+	return TheSeller;
+}
+
+void Item::setSeller(Seller* Seller)
+{
+	TheSeller = Seller;
+}
+
+bool Item::getStatus()
+{
+	return hasBeenBought;
+}
+
+void Item::setStatus(bool status)
+{
+	hasBeenBought = status;
+
 }

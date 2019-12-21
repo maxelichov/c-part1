@@ -20,14 +20,14 @@ public:
 	void RemoveFromCart(const char* ItemName);
 	int GetTotalPrice(); 
 	bool isEmpty();
-	void ShowCart();
-	void RemoveAllItems();
+	void ShowCart() const;
+	void RemoveAllItems(int& flag);
 	/*void DecreaseTotalPriceByName(const char* ItemName);*/
 	Item* getItemFromCart(int& ItemSerialNumber);
 	void updateCart(ShoppingCart* newCart);
 	int getItemListSize() const;
 	ItemList* getCartList();
 	bool checkIfItemExists(Item& item);
-
+	void changeItemsStatus();
 
 };

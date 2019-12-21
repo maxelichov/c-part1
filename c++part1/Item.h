@@ -1,5 +1,6 @@
 #pragma once
 #define ItemNameMAXlen 50
+class Seller;
 
 
 class Item
@@ -12,19 +13,26 @@ private:
 	int ItemPrice;
 	int SerialNumber;
 	eCategory itemCategory;
+	Seller* TheSeller;
+	bool hasBeenBought = false;
+
 
 public:
-	
-	bool isInShopingCart = false;
+
 	Item() = default;
 	Item(char* name, int price,int category); // ctor //
 	~Item(); // dtor//
 	bool setItemName(const char* name);
 	bool setItemPrice(int price);
 	bool setCategory(int itemCategory);
-	char* getItemName();
-	int	getItemPrice();
-	int getItemSerialNumber();
-	int	getItemCategory();
-	void showTheItem();
+	char* getItemName() const;
+	int	getItemPrice() const;
+	int getItemSerialNumber() const;
+	int	getItemCategory() const;
+	void showTheItem() const;
+	void setSeller(Seller* TheSeller);
+	Seller* getSeller();
+	bool getStatus();
+	void setStatus(bool status);
 };
+

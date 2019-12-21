@@ -2,17 +2,34 @@
 #include "shoppingcart.h"
 #pragma once
 
+using namespace std;
+#include <iostream>
+
 bool ShoppingCart::AddItemToCart(Item& ChosenItem)
 {
+	if ((!checkIfItemExists(ChosenItem))) // check if the item already in the cart or not
+	{
+		if (ChosenItem.getStatus() == true) // if the item has been bought already
+		{
+			cout << "Error: item " << ChosenItem.getItemName() << " with serial number " << ChosenItem.getItemSerialNumber() <<
+				" has been bought already!" << endl;
+			return false;
+		}
 
-	Cart->insert(ChosenItem);
-	TotalPrice += ChosenItem.getItemPrice();
-	ChosenItem.isInShopingCart = true;
-	return true;
+		if (Cart->insert(ChosenItem))
+		{
+			TotalPrice += ChosenItem.getItemPrice();
+			return true;
+		}
 
+	}
+
+	cout << "This item is already in your cart!" << endl;
+	
+	return false;
 }
 
-void ShoppingCart::ShowCart()
+void ShoppingCart::ShowCart() const
 {
 	Cart->showList();
 }
@@ -38,16 +55,20 @@ bool ShoppingCart::isEmpty()
 	return Cart->isEmpty();
 }
 
-void ShoppingCart::RemoveAllItems()
+void ShoppingCart::RemoveAllItems(int& flag)
 {
 	TotalPrice = 0;
-	Cart->removeAllItemsFromBuyer();
+	Cart->removeAllItemsFromBuyer(flag);
 
+}
+
+void ShoppingCart::changeItemsStatus()
+{
+	Cart->changeItemStatus();
 }
 
 ShoppingCart :: ~ShoppingCart()
 {
-	Cart->removeAllItemsFromBuyer();
 	delete Cart;
 }
 
@@ -63,7 +84,7 @@ Item* ShoppingCart::getItemFromCart(int& ItemSerialNumber)
 
 void ShoppingCart::updateCart(ShoppingCart* NewCart)
 {
-	TotalPrice += NewCart->GetTotalPrice();
+	TotalPrice = NewCart->GetTotalPrice();
 	Cart->updateItemList(NewCart);
 
 }

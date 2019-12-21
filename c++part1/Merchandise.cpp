@@ -78,7 +78,7 @@ bool Merchandise::haveDepartment(const char* category)
 	return false;
 }
 
-void Merchandise::ShowDepartment(const char* department)
+void Merchandise::ShowDepartment(const char* department) const
 {
 	for (int i = 0; i < this->getNumOfDepartments(); i++)
 	{

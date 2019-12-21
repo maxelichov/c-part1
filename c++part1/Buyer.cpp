@@ -47,8 +47,6 @@ Buyer::Buyer(char* Fname, char* Lname, char* bUsername, char* bPassword, char* C
 		} while (!indicator);
 
 	}
-
-	cout << "Success in making a buyer" << endl; // just for testing.
 }
 
 bool Buyer::setName(char* firstName, char* lastName)
@@ -74,7 +72,7 @@ bool Buyer::setName(char* firstName, char* lastName)
 		if (((firstName[i] < 'A') || (firstName[i] > 'Z')) && ((firstName[i] < 'a') || (firstName[i] > 'z')))
 		{
 			cout << "Invalid char in first name: " << firstName[i] << endl;
-			return 0;
+			return false;
 		}
 	}
 
@@ -83,14 +81,14 @@ bool Buyer::setName(char* firstName, char* lastName)
 		if (((lastName[i] < 'A') || (lastName[i] > 'Z')) && ((lastName[i] < 'a') || (lastName[i] > 'z')))
 		{
 			cout << "Invalid char in last name: " << lastName[i] << endl;
-			return 0;
+			return false;
 		}
 	}
 
 	b_Firstname = strdup(firstName);
 	b_Lastname = strdup(lastName);
 
-	return 1;
+	return true;
 }
 
 bool Buyer::setUsername(char* username)
@@ -99,11 +97,12 @@ bool Buyer::setUsername(char* username)
 	if (len < 1 || len >= maxLen)
 	{
 		cout << "Invalid username" << endl;
-		return 0;
+		return false;
 	}
+
 	b_Username = strdup(username);
 
-	return 1;
+	return true;
 
 }
 
@@ -113,11 +112,11 @@ bool Buyer::setPassword(char* password)
 	if (len < 1 || len >= maxLen)
 	{
 		cout << "Invalid password" << endl;
-		return 0;
+		return false;
 	}
 	b_Password = strdup(password);
 
-	return 1;
+	return true;
 
 }
 
@@ -129,8 +128,6 @@ Buyer::~Buyer()
 	delete[] b_Password;
 	delete[] b_Username;
 	delete[] PurchasedFromArr;
-	b_Cart.~ShoppingCart();
-	// need to delete shopping cart and purchased from arr?
 
 }
 
@@ -139,7 +136,9 @@ void Buyer::b_show() const
 	cout << "Buyer name is: " << b_Firstname << " " << b_Lastname << endl;
 	cout << "Living in: ";
 	b_address.show();
-
+	"Items in cart are:";
+	ShowCart();
+	cout << endl;
 }
 
 char* Buyer::getUsername() const
@@ -168,7 +167,7 @@ Seller* Buyer::getSeller(const char* Sellername)
 	return nullptr;
 }
 
-void Buyer::ShowCart()
+void Buyer::ShowCart() const
 {
 	b_Cart.ShowCart();
 }
@@ -179,9 +178,9 @@ int Buyer::getPriceOfCart()
 }
 
 
-void Buyer:: InsertItem(Item* item)
+bool Buyer:: InsertItem(Item* item)
 {
-	b_Cart.AddItemToCart(*item);
+	return (b_Cart.AddItemToCart(*item));
 }
 
 void Buyer::setTotalItems(int& size)
@@ -210,33 +209,53 @@ Item* Buyer::getItemFromCart(int& ItemSerialNumber)
 	return b_Cart.getItemFromCart(ItemSerialNumber);
 }
 
-void Buyer::UpdatePurchasedFromArr(Seller* TheSeller) 
+void Buyer::UpdatePurchasedFromArr(ShoppingCart& Cart) 
 {
+	int Arr_sz = 0;
+	ItemList* TheList = b_Cart.getCartList();
+	Seller** SellersArr = TheList->getAllSellersFromList(Arr_sz); // after this we will have an array of all the sellers we have items from
+
+
 	if (PurchasedFrom_sz == 0) //First purchase
 	{
-		PurchasedFromArr = new Seller*[PurchasedFrom_sz + 1];
-		PurchasedFromArr[0] = TheSeller;
-		PurchasedFrom_sz++;
+		PurchasedFromArr = new Seller * [Arr_sz];
+		for(int i=0;i<Arr_sz;i++)
+			PurchasedFromArr[i] = SellersArr[i];
+
+		PurchasedFrom_sz = Arr_sz;
 	}
 	
 	
-	else
+	else // already purchased from at least one seller
 	{
-		
-		if (this->getSeller(TheSeller->getUsername())) // If the seller already appears in the purchasedfrom arr.
-			return;
-		
-		int i = 0;
-		Seller** temp = new Seller*[PurchasedFrom_sz + 1]; // need to if already bought from the seller.
-		for (i = 0; i < PurchasedFrom_sz; i++)
+		int i;
+		int NewSellers = 0;
+		for (i = 0; i < Arr_sz; i++)
 		{
-			temp[i] = PurchasedFromArr[i];
+			if (!(this->getSeller(SellersArr[i]->getUsername()))) // If the seller dosen't already appear in the PurchasedFrom arr.
+				NewSellers++;
 		}
-		temp[i] = TheSeller;
-		delete[] PurchasedFromArr;
-		PurchasedFromArr = temp;
-		PurchasedFrom_sz++; 
 
+		if (NewSellers > 0) // if there are new sellers that needed to be add.
+		{
+			Seller** temp = new Seller * [PurchasedFrom_sz + NewSellers]; // make room for all the new sellers
+
+			for (i = 0; i < PurchasedFrom_sz; i++) // copy the old PurchasedFromArr to new arr.
+				temp[i] = PurchasedFromArr[i];
+
+			i = PurchasedFrom_sz;
+			for (int j = 0; j < Arr_sz; j++) // copy the new sellers
+			{
+				if (!(this->getSeller(SellersArr[j]->getUsername())))
+				{
+					temp[i] = SellersArr[j];
+					i++;
+				}
+			}
+			delete[] PurchasedFromArr;
+			PurchasedFromArr = temp;
+			PurchasedFrom_sz += NewSellers;
+		}
 	}
 }
 
@@ -253,15 +272,20 @@ void Buyer :: showPurchasedFrom()
 		cout << "Sellers you purchased from are : " << endl;
 		for (int i = 0; i < purchasedFrom; i++)
 		{
-			cout << i+1 <<" :" <<this->PurchasedFromArr[i]->getUsername() << endl;
+			cout << i+1 <<" :" <<PurchasedFromArr[i]->getUsername() << endl;
 		}
 	}
 }
 
-void Buyer::resetCart()
+void Buyer::resetCart(int flag)
 {
-	b_Cart.RemoveAllItems();
+	b_Cart.RemoveAllItems(flag);
 	TotalItemsIndex = 0;
+}
+
+void Buyer::changeItemStatus()
+{
+	b_Cart.changeItemsStatus();
 }
 
 void Buyer::IncreaseTotalItems()
@@ -272,4 +296,9 @@ void Buyer::IncreaseTotalItems()
 void Buyer::DecreaseTotalItems()
 {
 	TotalItemsIndex--;
+}
+
+ShoppingCart& Buyer::getCart()
+{
+	return b_Cart;
 }

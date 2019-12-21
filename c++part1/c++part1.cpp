@@ -1,3 +1,6 @@
+// In order to log in as admin , username is "mta" and password is "1234"
+
+
 #pragma once
 #include "pch.h"
 #include "Item.h"
@@ -18,7 +21,7 @@ using namespace std;
 #define maxLen 31
 using namespace std;
 #define EXIT 3
-#define ExitBuyerMenu 4
+#define ExitBuyerMenu 5
 const char* Categories[] = { "Children" , "Clothing" , "Electricity" , "Office" };
 enum eCategory { Children, Clothing, Electricity, Office };
 #define TotalCategories 4
@@ -28,12 +31,9 @@ enum eCategory { Children, Clothing, Electricity, Office };
 
 void displayMenu();
 bool validateChoice(int& MenuChoice);
-void ExecuteChoice(int& MenuChoice, Buyer*** AllBuyers, int& TotalBuyersLogSize, int& TotalBuyersPhysSize,
-	Seller*** AllSellers, int& TotalSellerslogSize, int& TotalSellersPhysSize);
 void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSize, int& Choice, Seller*** AllSellers, int& TotalSellerslogSize,
 	int& TotalSellersPhysSize);
 void cleanBuffer();
-void addItem(Seller** Sellers, int& size);
 void AddtoSeller(Seller* Sellers);
 void addItemToSeller(Seller* Sellers,  Item* item);
 void addFeedback(Buyer* TheBuyer);
@@ -61,6 +61,11 @@ void MakeAPurchase(Buyer* TheBuyer);
 void deleteSellers(Seller** AllSellers, int& TotalSellerslogSize);
 void deleteBuyers(Buyer** AllBuyers,int& TotalBuyerslogSize);
 void ChooseCertainItemsFromCart(Buyer* TheBuyer);
+void displayAdminMenu(Buyer** AllBuyers, Seller** AllSellers, int& TotalBuyerslogSize, int& TotalSellerslogSize);
+void ShowAllBuyers(Buyer** AllBuyers, int& size);
+void ShowAllSellers(Seller** AllSellers, int& size);
+bool UsernameExists(Buyer** AllBuyers, int& TotalBuyerslogSize, Seller** AllSellers, int& TotalSellerslogSize,char* username);
+void ShowMerch(Buyer* TheBuyer);
 
 
 int main()
@@ -108,7 +113,7 @@ int main()
 
 void displayMenu()
 {
-	cout << "Welcome! Please select your choice: \n1. Sign in \n2. Register \n3. Exit \n4.Admin login" << endl;
+	cout << "Welcome! Please select your choice: \n1. Sign in \n2. Register \n3. Exit \n4. Admin login" << endl;
 }
 bool validateChoice(int& MenuChoice) // sending by ref for efficency //
 {
@@ -156,6 +161,9 @@ void RegisterMenu(int& choice, Buyer*** AllBuyers, int& TotalBuyersLogSize, int&
 	case 2: // Add seller case
 		addUser(AllBuyers, TotalBuyersLogSize, TotalBuyersPhysSize, choice, AllSellers, TotalSellerslogSize, TotalSellersPhysSize);
 		break;
+
+	default:
+		break;
 	}
 }
 
@@ -188,15 +196,14 @@ void SignIn(Buyer** AllBuyers, Seller** AllSellers, int& TotalBuyerslogSize, int
 		cout << "Username or password is incorrect" << endl;
 
 	}
-			
-		
 }
 
 void displayBuyerMenu(Buyer* TheBuyer)
 {
 	cout << "\nWelcome " << TheBuyer->getUsername() << "!" << endl;
 	cout << "Please select your choice from the menu: " << endl;
-	cout << "1. Add feedback to a seller \n2. Add an item to your cart \n3. Make an order \n4. Return to main menu" << endl;
+	cout << "1. Add feedback to a seller \n2. Add an item to your cart \n3. Make an order \n4. My Cart" <<
+           "\n5. Return to main menu" << endl;
 }
 
  void displaySellerMenu(Seller* TheSeller)
@@ -205,7 +212,6 @@ void displayBuyerMenu(Buyer* TheBuyer)
 	 cout << "Please select your choice from the menu: " << endl;
 	 cout << "1. Add an item to your stock \n2. Show all the current items in your stock"
 		 "\n3. Return to main menu" << endl;
-
 }
 void caseSeller(Seller* TheSeller)
 {
@@ -229,7 +235,6 @@ void caseSeller(Seller* TheSeller)
 		}
 
 	} while (choice != EXIT);
-	
 }
 
 void ShowStock(Seller* TheSeller)
@@ -256,6 +261,10 @@ void caseBuyer(Buyer* TheBuyer, Seller** AllSellers, int& TotalSellerslogSize)
 			MakeAPurchase(TheBuyer);
 			break;
 
+		case 4:
+			ShowMerch(TheBuyer);
+			break;
+
 		default:
 			break;
 
@@ -264,6 +273,13 @@ void caseBuyer(Buyer* TheBuyer, Seller** AllSellers, int& TotalSellerslogSize)
 
 	} while (choice != ExitBuyerMenu);
 	
+}
+
+void ShowMerch(Buyer* TheBuyer)
+{
+	cout << endl;
+	TheBuyer->ShowCart();
+	cout << "Total Price is: " << TheBuyer->getPriceOfCart();
 }
 
 void MakeAPurchase(Buyer* TheBuyer)
@@ -284,9 +300,10 @@ void MakeAPurchase(Buyer* TheBuyer)
 	{
 		cout << "You have payed: " << TheBuyer->getPriceOfCart() << endl;
 		cout << "Thank you for your purchase! the items are on their way to :\n";
+		TheBuyer->UpdatePurchasedFromArr(TheBuyer->getCart());
 		TheBuyer->showAddress();
-		TheBuyer->resetCart();
-
+		TheBuyer->resetCart(1); // 1 will be a flag, so we know to mark all the items 
+		// that they were bought by making their in has been bought status to true.
 	}
 	else
 	{
@@ -316,7 +333,7 @@ void ChooseCertainItemsFromCart(Buyer* TheBuyer)
 			break;
 
 		Item = TheBuyer->getItemFromCart(serialNumber);
-		if (Item != nullptr)
+		if (Item != nullptr) // if the item with name and serial number exists in the current cart of buyer
 		{
 			if (strcmp(Item->getItemName(), ItemName) != 0)
 			{
@@ -327,15 +344,15 @@ void ChooseCertainItemsFromCart(Buyer* TheBuyer)
 				cin.getline(ItemName, ItemNameMAXlen);
 
 			}
-			else if (!(newCart->checkIfItemExists(*Item)))
+			else if (!(newCart->checkIfItemExists(*Item))) // if the item dosent exist then add him (prevent duplicates)
 			{
-				newCart->AddItemToCart(*Item);
-					TotalItems++;
-					cout << "Enter another item name or ""-1"" to exit: ";
-					cleanBuffer();
-					cin.getline(ItemName, ItemNameMAXlen);
+				newCart->AddItemToCart(*Item); // add item to new cart
+				TotalItems++;
+				cout << "Enter another item name or ""-1"" to exit: ";
+				cleanBuffer();
+				cin.getline(ItemName, ItemNameMAXlen);
 			}
-			else 
+			else
 			{
 				cout << "Item: " << Item->getItemName() << " already in your cart!" << endl;
 				cout << "Please try again!" << endl;
@@ -343,57 +360,41 @@ void ChooseCertainItemsFromCart(Buyer* TheBuyer)
 				cleanBuffer();
 				cin.getline(ItemName, ItemNameMAXlen);
 			}
-			
+
 		}
 		else if (Item == nullptr)
 		{
-			cout << "Item with the serial number " << ItemName << "wasn't found in your cart!" << endl;
+			cout << "Item " << ItemName << " with the serial number " << serialNumber << " wasn't found in your cart!" << endl;
 			cout << "Please try again or enter -1 to finish the process" << endl;
 			cout << "Enter item name or ""-1"" to exit: ";
 			cleanBuffer();
 			cin.getline(ItemName, ItemNameMAXlen);
 		}
-		
+
 	}
-	cout << "\nYour new cart is: " << endl;
-	newCart->ShowCart();
-	cout << "Total price is: " << newCart->GetTotalPrice();
-	TheBuyer->setTotalItems(TotalItems);
-	TheBuyer->resetCart();
-	TheBuyer->UpdateCart(newCart);
-	cout << "To confirm purchase press 1, to go back to main menu press other key\n";
-	int choice;
-	cin >> choice;
-	if (choice == 1)
+	if (TotalItems)
 	{
-		cout << "You have payed: " << TheBuyer->getPriceOfCart() << endl;
-		cout << "Thank you for your purchase! the items are on their way to :\n";
-		TheBuyer->showAddress();
-		TheBuyer->resetCart();
-	}
-	else
-		return;
-	
-}
-
-void ExecuteChoice(int& MenuChoice, Buyer*** AllBuyers, int& TotalBuyersLogSize, int& TotalBuyersPhysSize,
-	Seller*** AllSellers, int& TotalSellerslogSize, int& TotalSellersPhysSize)
-{
-	switch (MenuChoice) // Need to add more cases
-	{
-	case 1: // Add buyer case
-		addUser(AllBuyers, TotalBuyersLogSize, TotalBuyersPhysSize, MenuChoice, AllSellers, TotalSellerslogSize, TotalSellersPhysSize);
-		break;
-	case 2: // Add seller case
-		addUser(AllBuyers, TotalBuyersLogSize, TotalBuyersPhysSize, MenuChoice, AllSellers, TotalSellerslogSize, TotalSellersPhysSize);
-		break;											
-	case 3: // Add new item to seller
-		addItem(*AllSellers,TotalSellerslogSize);
-		break;
-
-
-		default:
-			break;
+		cout << "\nYour new cart is: " << endl;
+		newCart->ShowCart();
+		cout << "Total price is: " << newCart->GetTotalPrice() << endl;
+		TheBuyer->resetCart(0); // the 0 will be a flag, we need to check which items were bought so we can change their
+		// has been bought status.
+		TheBuyer->UpdateCart(newCart);
+		TheBuyer->setTotalItems(TotalItems);
+		cout << "To confirm purchase press 1, to go back to main menu press other key\n";
+		int choice;
+		cin >> choice;
+		if (choice == 1)
+		{
+			cout << "You have payed: " << TheBuyer->getPriceOfCart() << endl;
+			cout << "Thank you for your purchase! the items are on their way to :\n";
+			TheBuyer->showAddress();
+			TheBuyer->UpdatePurchasedFromArr(TheBuyer->getCart());
+			TheBuyer->resetCart(1);
+			
+		}
+		else
+			TheBuyer->changeItemStatus(); // If left the menu without buying the new cart, mark all the items as not bought.
 	}
 }
 
@@ -431,28 +432,53 @@ void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSi
 
 	if (Choice == 1) // need to add buyer.
 	{
+		bool Existed = false;
 		int i = 0;
 		Buyer* newBuyer = new Buyer(fname, lname, username, password, country, city, street, homenumber);
-		Buyer** temp = new Buyer * [TotalBuyerslogSize + 1];
-		for (i = 0; i < TotalBuyerslogSize; i++)
+		while (UsernameExists(*AllBuyers, TotalBuyerslogSize,*AllSellers,TotalSellerslogSize, username))
 		{
-			temp[i] = (*AllBuyers)[i];
+	        
+			delete newBuyer;
+			cout << endl << "The username " << username << " is already taken! please try again" << endl;
+			cout << "Enter new username: ";
+			if(!Existed)
+			   cleanBuffer();
+
+			cin.getline(username, maxLen);
+			newBuyer = new Buyer(fname, lname, username, password, country, city, street, homenumber);
+			Existed = true;
 		}
 
-		temp[i] = newBuyer;
-		delete[] * AllBuyers;
+		cout << "\nSuccess in making a buyer" << endl;
+		Buyer** temp = new Buyer * [TotalBuyerslogSize + 1]; // make new buyer array with more room
+		for (i = 0; i < TotalBuyerslogSize; i++) // copy all the old buyers to the new array
+			temp[i] = (*AllBuyers)[i];
+
+		temp[i] = newBuyer; // put the new buyer into the array
+		delete[] *AllBuyers;
 		*AllBuyers = temp;
 		TotalBuyerslogSize++;
 	}
 	else // meaning we need to add seller
 	{
+		bool Existed = false;
 		int i = 0;
 		Seller* newSeller = new Seller(fname, lname, username, password, country, city, street, homenumber);
+		while (UsernameExists(*AllBuyers, TotalBuyerslogSize, *AllSellers, TotalSellerslogSize, username))
+		{
+			delete newSeller;
+			cout << endl << "The username " << username << " is already taken! please try again" << endl;
+			if(!Existed)
+			 cleanBuffer();
+			cin.getline(username, maxLen);
+			newSeller = new Seller(fname, lname, username, password, country, city, street, homenumber);
+			Existed = true;
+		}
+
+		cout << "Success in making a seller" << endl;
 		Seller** temp = new Seller * [TotalSellerslogSize + 1];
 		for (i = 0; i < TotalSellerslogSize; i++)
-		{
 			temp[i] = (*AllSellers)[i];
-		}
 
 		temp[i] = newSeller;
 		delete[] * AllSellers;
@@ -461,23 +487,6 @@ void addUser(Buyer*** AllBuyers, int& TotalBuyerslogSize, int& TotalBuyersPhysSi
 	}
 }
 
-void addItem(Seller** Sellers, int& size)
-{
-	char username[maxLen], password[maxLen];
-	cout << " Please log in to the system in order to add an item to your merchandise" << endl;
-	cout << "Please enter your username: " << endl;
-	cin.getline(username, maxLen);
-	cout << "Please enter your password: " << endl;
-	cin.getline(password, maxLen);
-	int index; 
-
-	bool Valid = IsSellerInSystem(Sellers, size, username, password,index);
-
-	if (!Valid)
-		cout << "Error: Seller " << username << " is not in the system with the password " << password << endl;
-
-	return;
-}
 
 bool IsSellerInSystem(Seller** Sellers, const int& TotalSellerslogSize, char* username, char* password,int& index)
 {
@@ -493,7 +502,7 @@ bool IsSellerInSystem(Seller** Sellers, const int& TotalSellerslogSize, char* us
 }
 
 void AddtoSeller(Seller* SellerToAdd)
-{		// recieves the sellers array and the index of which specific seller is located in the array.
+{	
 	int Category, price;
 	char ItemName[ItemNameMAXlen];
 	cout << "Please Select your item category that you want to add: " << endl;
@@ -514,6 +523,7 @@ void AddtoSeller(Seller* SellerToAdd)
 void addItemToSeller(Seller* TheSeller,  Item* item)
 {
 	TheSeller->AddItemToStock(*item, item->getItemCategory()); // Add the item to the seller's merch
+	cout << "Item added to your stock!" << endl;
 }
 
 void PurchasedFrom(Buyer* TheBuyer)
@@ -596,6 +606,7 @@ void FindAndAddItem(const int& CategoryChoice, Buyer* TheBuyer, Seller** AllSell
 			AtleastOneItem = true;
 			cout << "Items of seller: " << AllSellers[i]->getUsername() << endl;
 			AllSellers[i]->showCategoryItems(Categories[CategoryChoice]); // show all the items that the seller have in the category
+			cout << endl;
 		}
 	}
 	if (AtleastOneItem == false)
@@ -645,17 +656,17 @@ void AddItemtobuyerFINAL(Buyer* TheBuyer, Seller** AllSellers, int& Sellers_sz, 
 		} 
 	}
 	if (item != nullptr) // meaning we found the item of choice.
-	{
 		InsertToBuyersCart(TheBuyer, AllSellers[i], item);
-		TheBuyer->IncreaseTotalItems(); // increase the total items by 1;
-	}
 
 }
 
 void InsertToBuyersCart(Buyer* TheBuyer, Seller* TheSeller, Item* item) // put the item into the buyers cart
 {
-	TheBuyer->InsertItem(item);
-	TheBuyer->UpdatePurchasedFromArr(TheSeller);
+	if (TheBuyer->InsertItem(item))
+	{
+		TheBuyer->IncreaseTotalItems(); // increase the total items by 1;
+		cout << "Item has been added to your cart!" << endl;
+	}
 }
 
 bool ValidateCategory(int& choice)
@@ -725,17 +736,83 @@ void deleteBuyers(Buyer** AllBuyers, int& TotalBuyerslogSize)
 void Adminlogin(Buyer** AllBuyers, Seller** AllSellers, int& TotalBuyerslogSize, int& TotalSellerslogSize)
 {
 	// Admin log in to the system for viewing details of all customers
-	char AdminName[] = "mta";
-	char AdminPass[] = "1234";
+	const char AdminName[] = "mta";
+	const char AdminPass[] = "1234";
 
 	char user[maxLen];
 	char password[maxLen];
 
 	cout << "Enter admin username: \n";
-	cin >> user;
+	cin.getline(user, maxLen);
 	if (strcmp(user, AdminName) != 0)
 	{
 		cout << "Wrong username!" << endl;
+		return;
+	}
+	cout << "Enter admin password: \n";
+	cin.getline(password, maxLen);
+	if (strcmp(password, AdminPass) != 0)
+	{
+		cout << "Wrong password!" << endl;
+		return;
+	}
+	cout << "\nlogin successful!";
+	displayAdminMenu(AllBuyers, AllSellers, TotalBuyerslogSize, TotalSellerslogSize);
+
+}
+
+void displayAdminMenu(Buyer** AllBuyers, Seller** AllSellers, int& TotalBuyerslogSize, int& TotalSellerslogSize)
+{
+	int choice;
+	do
+	{
+		cout << "\nEnter your choice:\n1.Show all existing buyers \n2.Show all existing sellers \n3.Return to main menu\n";
+		cin >> choice;
+		switch (choice)
+		{
+		case 1:
+			ShowAllBuyers(AllBuyers, TotalBuyerslogSize);
+			break;
+
+		case 2:
+			ShowAllSellers(AllSellers, TotalSellerslogSize);
+			break;
+
+		default:
+			break;
+
+		}
+
+	} while (choice != EXIT);
+	cout << endl;
+}
+
+void ShowAllBuyers(Buyer** AllBuyers, int& size)
+{
+	for (int i = 0; i < size; i++)
+		AllBuyers[i]->b_show();
+}
+
+void ShowAllSellers(Seller** AllSellers, int& size)
+{
+	for (int i = 0; i < size; i++)
+		AllSellers[i]->s_show();
+}
+
+bool UsernameExists(Buyer** AllBuyers, int& TotalBuyerslogSize,Seller** AllSellers,int& TotalSellerslogSize, char* username)
+{
+	int i;
+	for (i = 0; i < TotalBuyerslogSize; i++)
+	{
+		if (strcmp(AllBuyers[i]->getUsername(), username) == 0)
+			return true;
 	}
 
+	for (i = 0; i < TotalSellerslogSize; i++)
+	{
+		if (strcmp(AllSellers[i]->getUsername(), username) == 0)
+			return true;
+	}
+
+	return false;
 }

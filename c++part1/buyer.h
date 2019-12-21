@@ -34,18 +34,20 @@ public:
 	int getPurchasedFromSz () const;
 	void b_show() const;
 	Seller* getSeller(const char* Sellername);
-	void InsertItem(Item* item);
-	void UpdatePurchasedFromArr(Seller* TheSeller);
+	bool InsertItem(Item* item);
+	void UpdatePurchasedFromArr(ShoppingCart& Cart);
 	void showPurchasedFrom();
-	void ShowCart();
+	void ShowCart() const;
 	int getPriceOfCart();
-	void resetCart();
+	void resetCart(int flag);
 	void IncreaseTotalItems();
 	void DecreaseTotalItems();
 	Item* getItemFromCart(int& ItemSerialNumber);
 	void setTotalItems(int& size);;
 	void UpdateCart(ShoppingCart* newCart);
 	int getTotalItems();
+	void changeItemStatus();
+	ShoppingCart& getCart();
 
 
 

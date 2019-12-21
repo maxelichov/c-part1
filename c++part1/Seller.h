@@ -3,6 +3,7 @@
 #include "Address.h"
 #include "Merchandise.h"
 #include "feedback.h"
+#include "Item.h"
 class ItemNode;
 
 class Seller
@@ -26,11 +27,11 @@ public:
 	bool setPassword(char* Password);
 	char* getUsername() const;
 	char* getPassword() const;
-	void ShowStock();
+	void ShowStock() const;
 	void s_show()   const;
 	void AddItemToStock(Item& NewItem,int Category); 
 	void addFeedback(char* feedback,char* BuyerName);
-	int getCategoriesSize();
+	int getCategoriesSize() const;
 	bool HaveCategory(const char* Category);
 	void showCategoryItems(const char* Category);
 	Item* getItem(const char* Category,int& SerialNumber);

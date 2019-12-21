@@ -4,6 +4,7 @@
 #include "ItemNode.h"
 #include "Item.h"
 #include "shoppingcart.h"
+#include "Seller.h"
 #include <string.h>
 #include <iostream>
 using namespace std;
@@ -17,9 +18,9 @@ ItemList::ItemList()
 	head = tail = nullptr;
 }
 
-void ItemList::insert(Item& item) 
+bool ItemList::insert(Item& item) 
 {
-	  ItemNode* newItem = new ItemNode(item);
+	ItemNode* newItem = new ItemNode(item);
 	  size++;
 
 	if (head == nullptr) // meaning the list is empty.
@@ -35,7 +36,7 @@ void ItemList::insert(Item& item)
 		head = newItem;
 		
 	}
-	
+	return true;
 }
 
 ItemList::~ItemList()
@@ -162,14 +163,19 @@ void ItemList::removeAllItems()
 	this->~ItemList();
 }
 
-void ItemList::removeAllItemsFromBuyer()
+void ItemList::removeAllItemsFromBuyer(int& flag)
 {
 		size = 0;
 		ItemNode* node;
 		while (head)
 		{
 			node = head->next;
-			head->item = nullptr; // mark as empty ( we get the item by ref from the seller so we dont delete it)
+			if (flag) // meaning the items were bought, mark their status as true so no one can add/purchase them anymore.
+				head->item->setStatus(true);
+			else if (!flag)
+				head->item->setStatus(false);
+
+			head->item = nullptr; // mark as empty we get the item by ref from the seller so we dont delete it)
 			delete head; // we allocated a new itemnode so we delete.
 			head = node;
 		}
@@ -178,13 +184,17 @@ void ItemList::removeAllItemsFromBuyer()
 
 void ItemList::showList()
 {
+	int counter = 0;
 	ItemNode* temp = head;
 	while (temp)
 	{
 		temp->showNode();
 		temp = temp->next;
+		counter++;
 
 	}
+	if (counter == 0)
+		cout << "Your cart is empty!" << endl;
 }
 
 void ItemList::updateItemList(ShoppingCart* NewCart)
@@ -193,4 +203,49 @@ void ItemList::updateItemList(ShoppingCart* NewCart)
 	tail = NewCart->getCartList()->tail;
 	size = NewCart->getItemListSize();
 
+}
+
+void ItemList::changeItemStatus() // change all items status to true 
+{
+	ItemNode* temp = head;
+	while (temp)
+	{
+		temp->item->setStatus(false);
+		temp = temp->next;
+
+	}
+}
+
+Seller** ItemList::getAllSellersFromList(int& Arr_sz)
+{
+	int SellersArrlogsize = 0;
+	Seller** SellersArr = new Seller * [size]; // will have maximum size num of different sellers(size items)
+	for (int i = 0; i < size; i++)
+		SellersArr[i] = nullptr;
+
+	bool InArr = false;
+	ItemNode* node = head; 
+	while (node) // run on all the items list
+	{
+		for (int i = 0; i < SellersArrlogsize; i++) // run on all the sellers array that we will make from the list of items
+		{
+			Seller* TheSeller = node->item->getSeller();
+			if (strcmp(SellersArr[i]->getUsername(), TheSeller->getUsername()) == 0)
+			     InArr = true;
+		}
+		if (!InArr) // if we didnt find the seller in the array, meaning we need to add him
+		{
+			SellersArr[SellersArrlogsize] = node->item->getSeller();
+			SellersArrlogsize++;
+		}
+		node = node->next;
+		InArr = false;
+	}
+	Seller** temp = new Seller * [SellersArrlogsize];
+	for (int i = 0; i < SellersArrlogsize; i++)
+		temp[i] = SellersArr[i];
+
+	delete[]SellersArr;
+	Arr_sz = SellersArrlogsize; // update the array size by ref
+	return temp;
 }

@@ -49,8 +49,6 @@ Seller::Seller(char* Fname, char* Lname, char* bUsername, char* bPassword, char*
 		} while (!indicator);
 
 	}
-
-	cout << "Success in making a seller" << endl; // just for testing.
 }
 
 bool Seller::setName(char* firstName, char* lastName)
@@ -62,13 +60,13 @@ bool Seller::setName(char* firstName, char* lastName)
 	if (fNameLen >= maxLen || fNameLen < 1)
 	{
 		cout << "Invalid First name" << endl;
-		return 0;
+		return false;
 	}
 
 	if (LNameLen >= maxLen || LNameLen < 1)
 	{
 		cout << "Invalid last name" << endl;
-		return 0;
+		return false;
 	}
 
 	for (i = 0; i < fNameLen; i++)
@@ -76,7 +74,7 @@ bool Seller::setName(char* firstName, char* lastName)
 		if (((firstName[i] < 'A') || (firstName[i] > 'Z')) && ((firstName[i] < 'a') || (firstName[i] > 'z')))
 		{
 			cout << "Invalid char in first name :" << firstName[i] << endl;
-			return 0;
+			return false;
 		}
 	}
 
@@ -85,12 +83,12 @@ bool Seller::setName(char* firstName, char* lastName)
 		if (((lastName[i] < 'A') || (lastName[i] > 'Z')) && ((lastName[i] < 'a') || (lastName[i] > 'z')))
 		{		// making sure the name is valid //
 			cout << "Invalid char in last name :" << lastName[i] << endl;
-			return 0;
+			return false;
 		}
 	}
 	s_Firstname = strdup(firstName);
 	s_Lastname = strdup(lastName);
-	return 1;
+	return true;
 }
 
 bool Seller::setUsername(char* username)
@@ -99,11 +97,11 @@ bool Seller::setUsername(char* username)
 	if (len < 1 || len >= maxLen)
 	{
 		cout << "Invalid username" << endl;
-		return 0;
+		return false;
 	}
 	s_Username = strdup(username);
 
-	return 1;
+	return true;
 
 }
 
@@ -113,11 +111,11 @@ bool Seller::setPassword(char* password)
 	if (len < 1 || len >= maxLen)
 	{
 		cout << "Invalid password" << endl;
-		return 0;
+		return false;
 	}
 	s_Password = strdup(password);
 
-	return 1;
+	return true;
 
 }
 
@@ -136,7 +134,9 @@ void Seller::s_show() const
 	cout << "Seller's name is: " << s_Firstname << " " << s_Lastname << endl;
 	cout << "Living in: ";
 	s_address.show();
-
+	cout << "Seller's stock is: " << endl;
+	ShowStock();
+	cout << endl;
 
 }
 
@@ -153,6 +153,7 @@ char* Seller::getPassword() const
 void Seller::AddItemToStock(Item& NewItem,int Category)
 {
 	s_Merch.setItemToDepartment(NewItem, Category);
+	NewItem.setSeller(this);
 }
 
 void Seller::addFeedback(char* feedback,char* BuyerName)
@@ -160,7 +161,7 @@ void Seller::addFeedback(char* feedback,char* BuyerName)
 	allFeedBacks.AddFeedbackToSeller(feedback,BuyerName);
 }
 
-void Seller::ShowStock()
+void Seller::ShowStock() const
 {
 	if (getCategoriesSize() == 0)
 		cout << "Your item stock is empty!" << endl; 
@@ -176,7 +177,7 @@ void Seller::ShowStock()
 }
 
 
-int Seller::getCategoriesSize()
+int Seller::getCategoriesSize() const
 {
 	return(s_Merch.getNumOfDepartments());
 }
