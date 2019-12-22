@@ -15,6 +15,14 @@
 #include "c++part1.h"
 
 
+/*part 1 of the project submitted by :
+
+1) tomer shafir.id :206157281
+
+2) max elichov.id : 309350072
+
+we be long to the group  that studies at sundays with keren kalif */
+
 
 
 // In order to log in as admin , username is "mta" and password is "1234"
