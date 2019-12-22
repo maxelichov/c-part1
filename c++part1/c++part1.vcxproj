@@ -23,7 +23,7 @@
     <ProjectGuid>{00C980AB-396F-4D3B-BBB8-F23DA95802EF}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>cpart1</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -43,7 +43,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="Address.h" />
     <ClInclude Include="buyer.h" />
+    <ClInclude Include="c++part1.h" />
     <ClInclude Include="Department.h" />
     <ClInclude Include="feedback.h" />
     <ClInclude Include="FeedbackList.h" />

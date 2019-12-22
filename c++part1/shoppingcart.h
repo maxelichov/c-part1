@@ -16,7 +16,7 @@ public:
 	ShoppingCart() : Cart(new ItemList()), TotalPrice(0) {}
 	~ShoppingCart();
 	bool AddItemToCart(Item& ChosenItem);
-	/*void RemoveFromCart(Item& ChosenItem);*/
+	void RemoveFromCart(Item& ChosenItem);
 	void RemoveFromCart(const char* ItemName);
 	int GetTotalPrice(); 
 	bool isEmpty();

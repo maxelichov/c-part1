@@ -20,11 +20,11 @@ private:
 	ShoppingCart b_Cart; // deafult when making a buyer will be null;
 	Seller** PurchasedFromArr; // will point to all the sellers he purchased from.
 	int PurchasedFrom_sz = 0; // size of the purchased from arr
+	Buyer(const Buyer& other); // to deny copy of buyer. copy ctor is private.
 
 public:
 
 	Buyer(char* b_FirstName, char* b_LastName, char* b_Username, char* bPassword, char* Country, char* City, char* Street, int& HomeNumber);
-	/*Buyer(const Buyer& other);*/
 	bool setName(char* firstName, char* lastName);
 	bool setUsername(char* username);
 	bool setPassword(char* password);

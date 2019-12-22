@@ -11,6 +11,7 @@ public:
 private:
 	eCategory department;
 	ItemList* stock;
+	Department(Department& other); // prevent copy ctor.
 
 public:
 	Department();

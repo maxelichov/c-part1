@@ -7,6 +7,7 @@ class Feedback
 private:
 
 	FeedbackList* FList;
+	
 
 public:
 

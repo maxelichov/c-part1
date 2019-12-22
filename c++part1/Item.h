@@ -15,13 +15,14 @@ private:
 	eCategory itemCategory;
 	Seller* TheSeller;
 	bool hasBeenBought = false;
+	Item(const Item& other); // to prevent copy ctor.
 
 
 public:
 
 	Item() = default;
-	Item(char* name, int price,int category); // ctor //
-	~Item(); // dtor//
+	Item(char* name, int price,int category); 
+	~Item(); 
 	bool setItemName(const char* name);
 	bool setItemPrice(int price);
 	bool setCategory(int itemCategory);

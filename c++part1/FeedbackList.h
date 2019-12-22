@@ -8,6 +8,7 @@ private:
 	
 	int TotalNumOfFeedbacks;
 	FeedbackNode* head, * tail;
+	
 
 public:
 	

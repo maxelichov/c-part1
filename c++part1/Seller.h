@@ -16,12 +16,13 @@ private:
 	Address s_address;
 	Merchandise s_Merch;
 	Feedback allFeedBacks;  
+	Seller(const Seller& other); // to deny copy of seller . copy ctor is private.
 
 
 public:
 
 	Seller(char* s_Firstname, char* s_Lastname, char* s_Username, char* s_Password, char* Country, char* City, char* Street, int& HomeNumber);
-	~Seller();											 /*d'tor*/
+	~Seller();										
 	bool setName(char* Firstname, char* Lastname);
 	bool setUsername(char* Username);
 	bool setPassword(char* Password);
