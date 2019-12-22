@@ -29,6 +29,7 @@ public:
 	bool haveDepartment(const char* category);
 	void ShowDepartment(const char* department) const;
 	Item* getItemOfCategory(const char* Category,int& SerialNumber);
+	Department* getSpecificDepartment(const int type);
 
 
 };

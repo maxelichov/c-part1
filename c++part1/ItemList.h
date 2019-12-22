@@ -18,13 +18,14 @@ public:
 	bool removeSingle(const char* ItemName); 
 	void removeAllItems(); 
 	void removeAllItemsFromBuyer(int& flag);
-	Item* getItem(int& SerialNumber); //return a pointer or reference?
+	Item* getItem(int& SerialNumber); 
 	int getSize();
 	bool isEmpty(); 
 	void showList();
 	void updateItemList(ShoppingCart* NewCart);
 	void changeItemStatus();
 	Seller** getAllSellersFromList(int& size);
+	void showWantedItem(const char* itemName);
 	
 	~ItemList(); // for(all nodes) { delete node}
 };

@@ -767,3 +767,23 @@ bool UsernameExists(Buyer** AllBuyers, int& TotalBuyerslogSize,Seller** AllSelle
 
 	return false;
 }
+
+void showSameItems(Seller** AllSellers, int TotalSellersLogSize)
+{
+	char itemName[maxLen];
+	cout << "enter the name of the item you want to be displayed" << endl;
+	cleanBuffer();
+	cin.getline(itemName, maxLen);
+	for (int i = 0; i < TotalSellersLogSize; i++)
+	{
+		Merchandise tempMerch = AllSellers[i]->getSellersMerchandise();
+		int size = tempMerch.getNumOfDepartments();
+		for (int j = 0; j < size; j++)
+		{
+			Department* currDep = tempMerch.getSpecificDepartment(j);
+			currDep->
+		}
+
+		
+	}
+}

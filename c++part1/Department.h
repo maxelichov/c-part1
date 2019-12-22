@@ -22,5 +22,6 @@ public:
 	const char* getDepartment(const char* category);
 	ItemList* getStock();
 
+
 	~Department();
 };

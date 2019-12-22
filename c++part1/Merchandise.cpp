@@ -101,3 +101,8 @@ Item* Merchandise:: getItemOfCategory(const char* Category,int& SerialNumber)
     }
 	return nullptr;
 }
+
+Department* Merchandise :: getSpecificDepartment(const int type)
+{
+	return Departments[type];
+}

@@ -36,6 +36,7 @@ public:
 	bool HaveCategory(const char* Category);
 	void showCategoryItems(const char* Category);
 	Item* getItem(const char* Category,int& SerialNumber);
+	Merchandise getSellersMerchandise();
 
 	
 	/*bool CheckSellerItemStock(Seller& seller);*/

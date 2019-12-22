@@ -196,3 +196,8 @@ Item* Seller::getItem(const char* Category,int& SerialNumber)
 {
 	return this->s_Merch.getItemOfCategory(Category, SerialNumber);
 }
+
+ Merchandise Seller:: getSellersMerchandise()
+{
+	return s_Merch;
+}

@@ -23,3 +23,8 @@ void ItemNode::showNode()
 {
 	this->item->showTheItem();
 }
+
+char* ItemNode :: getItemName()
+{
+	return getItemName();
+}

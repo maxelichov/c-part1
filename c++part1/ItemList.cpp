@@ -249,3 +249,18 @@ Seller** ItemList::getAllSellersFromList(int& Arr_sz)
 	Arr_sz = SellersArrlogsize; // update the array size by ref
 	return temp;
 }
+
+void ItemList:: showWantedItem(const char* itemName)
+{
+	ItemNode* temp = head;
+	while(temp)
+	{
+		if (strcmp(temp->getItemName(), itemName) == 0)
+		{
+			temp->showNode();
+			cout << endl;
+		}
+	
+		temp = temp->next;
+	}
+}
