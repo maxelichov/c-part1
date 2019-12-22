@@ -5,6 +5,7 @@ using namespace std;
 using namespace std;
 #define EXIT 3
 #define ExitBuyerMenu 5
+#define EXITadminMenu 4
 const char* Categories[] = { "Children" , "Clothing" , "Electricity" , "Office" };
 enum eCategory { Children, Clothing, Electricity, Office };
 #define TotalCategories 4
@@ -49,4 +50,5 @@ void ShowAllBuyers(Buyer** AllBuyers, int& size);
 void ShowAllSellers(Seller** AllSellers, int& size);
 bool UsernameExists(Buyer** AllBuyers, int& TotalBuyerslogSize, Seller** AllSellers, int& TotalSellerslogSize, char* username);
 void ShowMerch(Buyer* TheBuyer);
+void showSameItems(Seller** AllSellers, int& TotalSellersLogSize);
 ////////////////////////////////////////////////////////////////////////////////////////////////

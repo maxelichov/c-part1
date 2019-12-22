@@ -5,9 +5,9 @@
 
 
 
-Department::Department()
+Department::Department() 
 {
-	department = (eCategory)5; // just to put some value.
+
 }
 
 Department::Department(int& cat)
@@ -42,4 +42,9 @@ ItemList* Department::getStock()
 const char* Department:: getDepartment(const char* category)
 {
 	return Categories[getDepartment()];
+}
+
+void Department::FindItemByName(const char* ItemName, int& counter)
+{
+	stock->showWantedItem(ItemName, counter);
 }

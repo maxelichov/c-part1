@@ -21,6 +21,7 @@ public:
 	int getDepartment();
 	const char* getDepartment(const char* category);
 	ItemList* getStock();
+	void FindItemByName(const char* ItemName, int& counter);
 
 
 	~Department();

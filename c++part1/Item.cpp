@@ -6,7 +6,7 @@
 #pragma warning(disable : 4996)
 using namespace std;
 int Item::ItemSerialNumber;
-
+const char* CategoriesV3[] = { "Children" , "Clothing" , "Electricity" , "Office" };
 
 
 Item::Item(char* name, int price,int category) : SerialNumber(++ItemSerialNumber)  // ctor //
@@ -114,7 +114,12 @@ int  Item::getItemCategory() const
 void Item::showTheItem() const
 {
 	cout << "Item Name: " << ItemName << ", Price: " << ItemPrice << ", Serial Number:" << SerialNumber << endl;
-	
+}
+
+void Item::showTheItemToAdmin() const
+{
+	cout << "Item Name: " << ItemName << ", Price: " << ItemPrice << ", Serial Number: " << SerialNumber <<
+		", Category: " << CategoriesV3[getItemCategory()] << ", Owner: " << TheSeller->getUsername() << endl;
 }
 
 Seller* Item::getSeller()

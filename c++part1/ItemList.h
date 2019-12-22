@@ -14,7 +14,6 @@ public:
 
 	ItemList();
 	bool insert(Item& item);
-	bool removeSingle(Item& item);
 	bool removeSingle(const char* ItemName); 
 	void removeAllItems(); 
 	void removeAllItemsFromBuyer(int& flag);
@@ -25,7 +24,8 @@ public:
 	void updateItemList(ShoppingCart* NewCart);
 	void changeItemStatus();
 	Seller** getAllSellersFromList(int& size);
-	void showWantedItem(const char* itemName);
-	
+	void showWantedItem(const char* itemName,int& counter);
 	~ItemList(); // for(all nodes) { delete node}
+
+	/*bool removeSingle(Item& item);*/
 };

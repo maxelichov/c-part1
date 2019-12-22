@@ -4,6 +4,7 @@
 #include "Merchandise.h"
 #include "feedback.h"
 #include "Item.h"
+
 class ItemNode;
 
 class Seller
@@ -35,9 +36,10 @@ public:
 	int getCategoriesSize() const;
 	bool HaveCategory(const char* Category);
 	void showCategoryItems(const char* Category);
+	void DisplayItemByName(const char* ItemName, int& counter);
 	Item* getItem(const char* Category,int& SerialNumber);
-	Merchandise getSellersMerchandise();
 
+	friend class Item;
 	
 	/*bool CheckSellerItemStock(Seller& seller);*/
 	/*friend GiveFidbackToSeller(Seller* TheSeller, char* feedback);*/ //Todo

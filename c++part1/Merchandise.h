@@ -20,16 +20,15 @@ public:
 	Merchandise();
 	~Merchandise(); // dtor //
 	void setItemToDepartment(Item& itemToAdd , int& department);
-	/*void RemoveItem(Item& itemToRemove);  // to do */
-	/*const Item& GetItemFromStok(Item& ItemToGet);*/ // to do//
 	void setNumOfDepatrments(const int& newNumOfDepartments);
-	void setTotalNumOfItems(const int& totalNumOfItems);
 	int getNumOfDepartments() const;
 	int getTotalNumOfItems() const;
 	bool haveDepartment(const char* category);
 	void ShowDepartment(const char* department) const;
 	Item* getItemOfCategory(const char* Category,int& SerialNumber);
-	Department* getSpecificDepartment(const int type);
+	void DisplayItemByName(const char* ItemName, int& counter);
+	/*void RemoveItem(Item& itemToRemove);  // to do */
+/*const Item& GetItemFromStok(Item& ItemToGet);*/ // to do//
 
 
 };

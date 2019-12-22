@@ -192,12 +192,12 @@ void Seller::showCategoryItems(const char* Category)
 	this->s_Merch.ShowDepartment(Category);
 }
 
+void Seller::DisplayItemByName(const char* ItemName,int& counter) 
+{
+	s_Merch.DisplayItemByName(ItemName,counter);
+}
+
 Item* Seller::getItem(const char* Category,int& SerialNumber)
 {
 	return this->s_Merch.getItemOfCategory(Category, SerialNumber);
-}
-
- Merchandise Seller:: getSellersMerchandise()
-{
-	return s_Merch;
 }

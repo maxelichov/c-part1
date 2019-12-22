@@ -1,5 +1,7 @@
 #pragma once
 #define ItemNameMAXlen 50
+
+#include "Seller.h"
 class Seller;
 
 
@@ -31,6 +33,7 @@ public:
 	int getItemSerialNumber() const;
 	int	getItemCategory() const;
 	void showTheItem() const;
+	void showTheItemToAdmin() const;
 	void setSeller(Seller* TheSeller);
 	Seller* getSeller();
 	bool getStatus();

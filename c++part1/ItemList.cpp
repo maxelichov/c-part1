@@ -250,17 +250,17 @@ Seller** ItemList::getAllSellersFromList(int& Arr_sz)
 	return temp;
 }
 
-void ItemList:: showWantedItem(const char* itemName)
+void ItemList:: showWantedItem(const char* itemName,int& counter)
 {
 	ItemNode* temp = head;
 	while(temp)
 	{
 		if (strcmp(temp->getItemName(), itemName) == 0)
 		{
-			temp->showNode();
+			temp->showToAdmin();
 			cout << endl;
+			counter++;
 		}
-	
 		temp = temp->next;
 	}
 }

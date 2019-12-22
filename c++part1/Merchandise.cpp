@@ -9,11 +9,16 @@
 
 const char* Categories1[] = { "Children" , "Clothing" , "Electricity" , "Office" };
 
-Merchandise::Merchandise()  // C'TOR
+Merchandise::Merchandise() // C'TOR
 {
+
 	NumOfDepartments = 0;
 	TotalNumOfItems = 0;
-	
+}
+
+int Merchandise::getTotalNumOfItems()const
+{
+	return TotalNumOfItems;
 }
 
 int Merchandise::getNumOfDepartments() const
@@ -102,7 +107,9 @@ Item* Merchandise:: getItemOfCategory(const char* Category,int& SerialNumber)
 	return nullptr;
 }
 
-Department* Merchandise :: getSpecificDepartment(const int type)
+void Merchandise::DisplayItemByName(const char* ItemName,int& counter)
 {
-	return Departments[type];
+	for (int i = 0; i < NumOfDepartments; i++)
+		Departments[i]->FindItemByName(ItemName, counter);
+	 
 }

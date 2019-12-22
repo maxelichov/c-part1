@@ -1,5 +1,4 @@
 
-
 #pragma once
 #include "pch.h"
 #include "Item.h"
@@ -717,7 +716,7 @@ void displayAdminMenu(Buyer** AllBuyers, Seller** AllSellers, int& TotalBuyerslo
 	int choice;
 	do
 	{
-		cout << "\nEnter your choice:\n1.Show all existing buyers \n2.Show all existing sellers \n3.Return to main menu\n";
+		cout << "\nEnter your choice:\n1.Show all existing buyers \n2.Show all existing sellers \n3.Search for item in system \n4.Return to main menu\n";
 		cin >> choice;
 		switch (choice)
 		{
@@ -729,12 +728,16 @@ void displayAdminMenu(Buyer** AllBuyers, Seller** AllSellers, int& TotalBuyerslo
 			ShowAllSellers(AllSellers, TotalSellerslogSize);
 			break;
 
+		case 3:
+			showSameItems(AllSellers, TotalSellerslogSize);
+			break;
+
 		default:
 			break;
 
 		}
 
-	} while (choice != EXIT);
+	} while (choice != EXITadminMenu);
 	cout << endl;
 }
 
@@ -768,22 +771,21 @@ bool UsernameExists(Buyer** AllBuyers, int& TotalBuyerslogSize,Seller** AllSelle
 	return false;
 }
 
-void showSameItems(Seller** AllSellers, int TotalSellersLogSize)
+void showSameItems(Seller** AllSellers, int& TotalSellersLogSize)
 {
 	char itemName[maxLen];
-	cout << "enter the name of the item you want to be displayed" << endl;
+	int counter = 0;
+	cout << "Enter the item name of which u want to look for in the system" << endl;
 	cleanBuffer();
 	cin.getline(itemName, maxLen);
+	cout << endl;
 	for (int i = 0; i < TotalSellersLogSize; i++)
-	{
-		Merchandise tempMerch = AllSellers[i]->getSellersMerchandise();
-		int size = tempMerch.getNumOfDepartments();
-		for (int j = 0; j < size; j++)
-		{
-			Department* currDep = tempMerch.getSpecificDepartment(j);
-			currDep->
-		}
+		AllSellers[i]->DisplayItemByName(itemName,counter);
+	
+	if (counter == 0) // no items with the item name entered were found
+		cout << "No items in the system with the name: " << itemName << " were found!" << endl;
 
-		
-	}
+	else if (counter > 0)
+		cout << "There are: " << counter << " items with the name: " << itemName << endl;
+	
 }

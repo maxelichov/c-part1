@@ -19,12 +19,17 @@ ItemNode ::~ItemNode() // maby need to fix on the future.
 {
 	delete item;
 }
-void ItemNode::showNode()
+void ItemNode::showNode() const
 {
 	this->item->showTheItem();
 }
 
+void ItemNode::showToAdmin() const
+{
+	this->item->showTheItemToAdmin();
+}
+
 char* ItemNode :: getItemName()
 {
-	return getItemName();
+	return item->getItemName();
 }
